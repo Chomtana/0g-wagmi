@@ -7,37 +7,6 @@ A monorepo containing wagmi hooks for interacting with the 0G Compute Network.
 - **`0g-wagmi`** - Core SDK with React hooks for 0G Network integration
 - **`examples`** - Example React Router application demonstrating the SDK usage
 
-## Quick Start
-
-1. **Install dependencies:**
-   ```bash
-   pnpm install
-   ```
-
-2. **Build the SDK:**
-   ```bash
-   pnpm build
-   ```
-
-3. **Set up environment variables for the example app:**
-   ```bash
-   cp packages/examples/.env.example packages/examples/.env
-   ```
-   
-   Edit `packages/examples/.env` and add your Reown (WalletConnect) project ID:
-   ```
-   REOWN_PROJECT_ID=your_project_id_here
-   ```
-   
-   Get your project ID from [Reown Cloud](https://cloud.reown.com/)
-
-4. **Run the example app:**
-   ```bash
-   pnpm dev
-   ```
-
-   The app will be available at `http://localhost:5173` (or next available port)
-
 ## 0g-wagmi SDK Usage
 
 ### Installation
@@ -98,21 +67,70 @@ function AddFundsComponent() {
 }
 ```
 
-#### `useEthersSigner`
-Convert wagmi wallet client to Ethers signer:
+## Polyfills
 
-```tsx
-import { useEthersSigner } from '0g-wagmi'
+The `@0glabs/0g-serving-broker` package depends on several Node.js server-side modules that are not available in the browser. To prevent build errors, make sure to exclude these modules from the Vite build process by creating `app/empty.js` and updating your configuration as shown below. You also need to include a Buffer polyfill.
 
-function Component() {
-  const signer = useEthersSigner()
-  
-  // Use signer with any Ethers.js library
-  // including @0glabs/0g-serving-broker
-}
+### app/empty.js
+
+```javascript
+const unsupported = (name) => (..._args) => {
+  throw new Error(`child_process.${name} is not supported in this environment`);
+};
+
+// Functions
+export const spawn = unsupported("spawn");
+export const exec = unsupported("exec");
+export const execFile = unsupported("execFile");
+export const fork = unsupported("fork");
+export const execSync = unsupported("execSync");
+export const spawnSync = unsupported("spawnSync");
+export const execFileSync = unsupported("execFileSync");
+
+// Classes / symbols that libraries sometimes reference
+export class ChildProcess {}
+export const forkOpts = {}; // placeholder sometimes used in examples
+
+// Default export with the same members (helps with `import cp from 'child_process'`)
+export default {
+  spawn,
+  exec,
+  execFile,
+  fork,
+  execSync,
+  spawnSync,
+  execFileSync,
+  ChildProcess,
+  forkOpts,
+};
 ```
 
-## Network Configuration
+### vite.config.ts
+
+```typescript
+export default defineConfig({
+  ...,
+  resolve: {
+    alias: {
+      child_process: "/app/empty.js",
+      "fs/promises": "/app/empty.js",
+      fs: "/app/empty.js",
+      path: "/app/empty.js",
+    },
+  },
+  define: {
+    global: "globalThis",
+  },
+  optimizeDeps: {
+    include: ["buffer"],
+  },
+});
+```
+
+### package.json
+Install `buffer` package
+
+## Launch the Example
 
 The SDK includes 0G Testnet configuration:
 
@@ -124,6 +142,37 @@ import { ZG_TESTNET_CONFIG } from '0g-wagmi'
 // - chainId: 16600
 // - chainName: '0G Testnet'
 ```
+
+## Quick Start
+
+1. **Install dependencies:**
+   ```bash
+   pnpm install
+   ```
+
+2. **Build the SDK:**
+   ```bash
+   pnpm build
+   ```
+
+3. **Set up environment variables for the example app:**
+   ```bash
+   cp packages/examples/.env.example packages/examples/.env
+   ```
+   
+   Edit `packages/examples/.env` and add your Reown (WalletConnect) project ID:
+   ```
+   REOWN_PROJECT_ID=your_project_id_here
+   ```
+   
+   Get your project ID from [Reown Cloud](https://cloud.reown.com/)
+
+4. **Run the example app:**
+   ```bash
+   pnpm dev
+   ```
+
+   The app will be available at `http://localhost:5173` (or next available port)
 
 ## Development
 

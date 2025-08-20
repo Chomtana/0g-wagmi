@@ -9,6 +9,7 @@ import {
 import { Web3Provider } from "./context/Web3Provider";
 
 import type { Route } from "./+types/root";
+import "./setup-globals";
 import "./app.css";
 
 export const links: Route.LinksFunction = () => [

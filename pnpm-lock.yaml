@@ -59,6 +59,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.62.14
         version: 5.85.5(react@19.1.1)
+      buffer:
+        specifier: ^6.0.3
+        version: 6.0.3
       isbot:
         specifier: ^5.1.27
         version: 5.1.30

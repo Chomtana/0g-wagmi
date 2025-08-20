@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { createZGComputeNetworkBroker } from "@0glabs/0g-serving-broker";
 import { useEthersSigner } from "./useEthersSigner";
-import { formatEther } from "viem";
 
 export interface Use0gBalanceParams {
   chainId?: number;

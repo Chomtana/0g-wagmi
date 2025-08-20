@@ -1,0 +1,43 @@
+{
+  "name": "0g-wagmi",
+  "version": "1.0.0",
+  "description": "Wagmi hooks for 0G Compute Network",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["0g", "wagmi", "ethereum", "web3", "hooks"],
+  "author": "",
+  "license": "MIT",
+  "packageManager": "pnpm@10.11.0",
+  "peerDependencies": {
+    "@tanstack/react-query": ">=5.0.0",
+    "react": ">=18",
+    "viem": ">=2.0.0",
+    "wagmi": ">=2.0.0"
+  },
+  "dependencies": {
+    "@0glabs/0g-serving-broker": "^0.3.1",
+    "ethers": "^6.13.4"
+  },
+  "devDependencies": {
+    "@tanstack/react-query": "^5.62.14",
+    "@types/react": "^19.1.2",
+    "react": "^19.1.0",
+    "tsup": "^8.3.6",
+    "typescript": "^5.8.3",
+    "viem": "^2.22.5",
+    "wagmi": "^2.15.3"
+  }
+}

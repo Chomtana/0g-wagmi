@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* Force light theme only */
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  @apply bg-white;
+  color-scheme: light;
+}
+
+/* Override dark mode preferences */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: light;
+  }
+  
+  html,
+  body {
+    color-scheme: light;
+    @apply bg-white;
+  }
+}

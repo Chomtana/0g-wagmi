@@ -130,27 +130,14 @@ export default defineConfig({
 ### package.json
 Install `buffer` package
 
-## Launch the Example
-
-The SDK includes 0G Testnet configuration:
-
-```tsx
-import { ZG_TESTNET_CONFIG } from '0g-wagmi'
-
-// ZG_TESTNET_CONFIG includes:
-// - rpcUrl: 'https://evmrpc-testnet.0g.ai'
-// - chainId: 16600
-// - chainName: '0G Testnet'
-```
-
-## Quick Start
+## Development
 
 1. **Install dependencies:**
    ```bash
    pnpm install
    ```
 
-2. **Build the SDK:**
+2. **Build the SDK and examples:**
    ```bash
    pnpm build
    ```
@@ -173,22 +160,6 @@ import { ZG_TESTNET_CONFIG } from '0g-wagmi'
    ```
 
    The app will be available at `http://localhost:5173` (or next available port)
-
-## Development
-
-### Build all packages:
-```bash
-pnpm -r build
-```
-
-### Run in development mode:
-```bash
-# SDK watch mode
-cd packages/0g-wagmi && pnpm dev
-
-# Example app
-cd packages/examples && pnpm dev
-```
 
 ## License
 

@@ -18,5 +18,6 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ["buffer"],
+    exclude: ["child_process", "fs/promises", "fs", "path"],
   },
 });

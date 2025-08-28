@@ -24,9 +24,18 @@ export function use0gAddFunds({
       }
 
       setIsLoading(true);
+
       try {
         const broker = await createZGComputeNetworkBroker(signer);
-        await broker.ledger.addLedger(parseFloat(amount));
+        await broker.ledger.getLedger();
+        await broker.ledger.depositFund(parseFloat(amount));
+      } catch (error: any) {
+        if (error.message.includes("Account does not exist")) {
+          const broker = await createZGComputeNetworkBroker(signer);
+          await broker.ledger.addLedger(parseFloat(amount));
+        }
+
+        throw error;
       } finally {
         setIsLoading(false);
       }

@@ -24,19 +24,33 @@ export function use0gBalance({
     queryKey: ["0g-balance", chainId, signer?.address],
     queryFn: async (): Promise<LedgerAccount> => {
       if (!signer) {
-        throw new Error("No wallet connected");
+        return {
+          totalBalance: BigInt(0),
+          availableBalance: BigInt(0),
+        };
       }
 
-      const broker = await createZGComputeNetworkBroker(signer);
-      const account = await broker.ledger.getLedger();
+      try {
+        const broker = await createZGComputeNetworkBroker(signer);
+        const account = await broker.ledger.getLedger();
 
-      const totalBalance = account.totalBalance?.toString() || "0";
-      const availableBalance = account.availableBalance?.toString() || "0";
+        const totalBalance = account.totalBalance?.toString() || "0";
+        const availableBalance = account.availableBalance?.toString() || "0";
 
-      return {
-        totalBalance: BigInt(totalBalance),
-        availableBalance: BigInt(availableBalance),
-      };
+        return {
+          totalBalance: BigInt(totalBalance),
+          availableBalance: BigInt(availableBalance),
+        };
+      } catch (error: any) {
+        if (error.message.includes("Account does not exist")) {
+          return {
+            totalBalance: BigInt(0),
+            availableBalance: BigInt(0),
+          };
+        }
+
+        throw error;
+      }
     },
     enabled: enabled && !!signer,
     refetchInterval,

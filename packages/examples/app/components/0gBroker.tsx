@@ -1,5 +1,10 @@
 import { useState } from "react";
-import { use0gAddFunds, use0gBalance, use0gWithdrawFunds } from "0g-wagmi";
+import {
+  use0gAddFunds,
+  use0gBalance,
+  use0gServices,
+  use0gWithdrawFunds,
+} from "0g-wagmi";
 import { useAccount } from "wagmi";
 
 export function ZGBrokerComponent() {
@@ -34,6 +39,10 @@ export function ZGBrokerComponent() {
       setAmount("");
     },
   });
+
+  const { services, isLoading: isLoadingServices } = use0gServices();
+
+  console.log("services", services);
 
   const handleAddFunds = async () => {
     if (!amount || parseFloat(amount) <= 0) {

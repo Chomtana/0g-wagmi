@@ -9,6 +9,7 @@ export {
   type LedgerAccount,
 } from "./hooks/use0gBalance";
 export { use0gBroker } from "./hooks/use0gBroker";
+export { use0gServices } from "./hooks/use0gServices";
 export { useEthersSigner } from "./hooks/useEthersSigner";
 export {
   walletClientToSigner,

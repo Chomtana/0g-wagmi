@@ -25,6 +25,7 @@ import { use0gBalance, use0gAddFunds, use0gWithdrawFunds } from "0g-wagmi";
 import { useAccount } from "wagmi";
 import { parseEther, formatEther } from "viem";
 import { useToast } from "@/hooks/use-toast";
+import { ConnectButton } from "@/components/ConnectButton";
 import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
@@ -204,42 +205,25 @@ export default function AIMarketplacePage() {
     <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container max-w-6xl mx-auto flex h-16 items-center justify-between">
+        <div className="container max-w-6xl mx-auto px-4 flex h-16 items-center justify-between">
           <div className="flex items-center space-x-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
               <Brain className="h-5 w-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold">0g-wagmi Demo</span>
+            <span className="text-lg sm:text-xl font-bold">
+              0g-wagmi <span className="hidden sm:inline">Demo</span>
+            </span>
           </div>
-          <nav className="hidden md:flex items-center space-x-6">
-            <a
-              href="#"
-              className="text-sm font-medium hover:text-primary transition-colors hover:cursor-pointer"
-            >
-              Models
-            </a>
-            <a
-              href="#"
-              className="text-sm font-medium hover:text-primary transition-colors hover:cursor-pointer"
-            >
-              Providers
-            </a>
-            <a
-              href="#"
-              className="text-sm font-medium hover:text-primary transition-colors hover:cursor-pointer"
-            >
-              Documentation
-            </a>
-          </nav>
+          <ConnectButton />
         </div>
       </header>
 
-      <main className="container max-w-6xl mx-auto py-8">
+      <main className="container max-w-6xl mx-auto px-4 py-4 sm:py-8">
         {/* Credit Section */}
         <Card className="mb-8">
           <CardContent className="pt-6">
             {isConnected ? (
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div className="flex items-center gap-4">
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
                     <span className="text-lg font-bold text-primary">OG</span>
@@ -248,41 +232,46 @@ export default function AIMarketplacePage() {
                     <p className="text-sm font-medium text-muted-foreground">
                       Available Credit
                     </p>
-                    <p className="text-3xl font-bold text-primary">
+                    <p className="text-2xl sm:text-3xl font-bold text-primary">
                       {formatBalance(balance?.availableBalance)} OG
                     </p>
                   </div>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap sm:flex-nowrap">
                   <Button
-                    className="hover:cursor-pointer"
+                    className="hover:cursor-pointer flex-1 sm:flex-initial"
                     onClick={() => setShowAddModal(true)}
+                    size="sm"
                   >
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add
+                    <Plus className="h-4 w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">Add</span>
+                    <span className="sm:hidden">Add</span>
                   </Button>
                   <Button
-                    className="hover:cursor-pointer"
+                    className="hover:cursor-pointer flex-1 sm:flex-initial"
                     onClick={() => setShowWithdrawModal(true)}
+                    size="sm"
                   >
-                    <Minus className="h-4 w-4 mr-2" />
-                    Withdraw
+                    <Minus className="h-4 w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">Withdraw</span>
+                    <span className="sm:hidden">Withdraw</span>
                   </Button>
                   <Button
-                    className="hover:cursor-pointer"
+                    className="hover:cursor-pointer flex-1 sm:flex-initial"
                     onClick={handleFaucet}
+                    size="sm"
                   >
-                    <Droplets className="h-4 w-4 mr-2" />
-                    Faucet
+                    <Droplets className="h-4 w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">Faucet</span>
+                    <span className="sm:hidden">Faucet</span>
                   </Button>
                 </div>
               </div>
             ) : (
               <div className="text-center py-4">
-                <p className="text-muted-foreground mb-4">
-                  Connect your wallet to view balance
+                <p className="text-muted-foreground">
+                  Connect your wallet to view balance and manage 0G tokens
                 </p>
-                <Button>Connect Wallet</Button>
               </div>
             )}
           </CardContent>
@@ -290,7 +279,7 @@ export default function AIMarketplacePage() {
 
         {/* Add Funds Modal */}
         {showAddModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <Card className="w-full max-w-md">
               <CardHeader>
                 <CardTitle>Add Funds</CardTitle>
@@ -325,7 +314,7 @@ export default function AIMarketplacePage() {
 
         {/* Withdraw Funds Modal */}
         {showWithdrawModal && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <Card className="w-full max-w-md">
               <CardHeader>
                 <CardTitle>Withdraw Funds</CardTitle>
@@ -375,12 +364,12 @@ export default function AIMarketplacePage() {
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 flex-wrap">
               <Badge
                 variant={
                   selectedCategory === "All Models" ? "secondary" : "outline"
                 }
-                className="hover:cursor-pointer hover:bg-accent"
+                className="hover:cursor-pointer hover:bg-accent text-xs sm:text-sm"
                 onClick={() => setSelectedCategory("All Models")}
               >
                 All Models
@@ -389,21 +378,21 @@ export default function AIMarketplacePage() {
                 variant={
                   selectedCategory === "Language" ? "secondary" : "outline"
                 }
-                className="hover:cursor-pointer hover:bg-accent"
+                className="hover:cursor-pointer hover:bg-accent text-xs sm:text-sm"
                 onClick={() => setSelectedCategory("Language")}
               >
                 Language
               </Badge>
               <Badge
                 variant={selectedCategory === "Image" ? "secondary" : "outline"}
-                className="hover:cursor-pointer hover:bg-accent"
+                className="hover:cursor-pointer hover:bg-accent text-xs sm:text-sm"
                 onClick={() => setSelectedCategory("Image")}
               >
                 Image
               </Badge>
               <Badge
                 variant={selectedCategory === "Audio" ? "secondary" : "outline"}
-                className="hover:cursor-pointer hover:bg-accent"
+                className="hover:cursor-pointer hover:bg-accent text-xs sm:text-sm"
                 onClick={() => setSelectedCategory("Audio")}
               >
                 Audio
@@ -415,7 +404,7 @@ export default function AIMarketplacePage() {
         {/* Models Grid */}
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-balance">Available Models</h2>
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {filteredModels.map((model) => (
               <Card
                 key={model.id}

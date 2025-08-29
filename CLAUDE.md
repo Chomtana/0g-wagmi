@@ -8,6 +8,10 @@ This is a monorepo using pnpm workspaces with the following structure:
 - `/packages/0g-wagmi/` - Core 0g-wagmi SDK package with React hooks for 0G Network integration
 - `/packages/examples/` - React Router example application demonstrating 0g-wagmi usage with Reown wallet connector
 
+## Hover cursor pointer
+
+Add `hover:cursor-pointer` to all clickable buttons
+
 ## Commands
 
 ### 0g-wagmi Package
@@ -16,10 +20,9 @@ Located in `/packages/0g-wagmi/`:
 ```bash
 # Build the package
 pnpm build
-
-# Development build with watch mode
-pnpm dev
 ```
+
+Do NOT run `pnpm dev`
 
 ### Examples Package (React Router App)
 Located in `/packages/examples/`:

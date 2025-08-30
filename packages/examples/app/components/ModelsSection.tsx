@@ -6,6 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useEffect, useState, type ReactNode } from "react";
 import { use0gServices } from "0g-wagmi";
 import { formatEther } from "viem";
+import { ChatModal } from "@/components/ChatModal";
 
 interface Model {
   id: number;
@@ -63,6 +64,7 @@ interface Model {
 export function ModelsSection() {
   const { toast } = useToast();
   const [models, setModels] = useState<Model[]>([]);
+  const [selectedModel, setSelectedModel] = useState<Model | null>(null);
   const { services, isLoading } = use0gServices();
 
   useEffect(() => {
@@ -141,7 +143,7 @@ export function ModelsSection() {
           : models.map((model) => (
               <Card
                 key={model.id}
-                className="hover:shadow-lg transition-shadow hover:cursor-pointer"
+                className="hover:shadow-lg transition-shadow"
               >
                 <CardHeader className="pb-4">
                   <div className="flex items-start justify-between">
@@ -198,13 +200,25 @@ export function ModelsSection() {
                     </div>
                   </div>
 
-                  <Button className="w-full hover:cursor-pointer" size="sm">
+                  <Button 
+                    className="w-full hover:cursor-pointer" 
+                    size="sm"
+                    onClick={() => setSelectedModel(model)}
+                  >
                     Use Model
                   </Button>
                 </CardContent>
               </Card>
             ))}
       </div>
+      
+      {selectedModel && (
+        <ChatModal
+          modelName={selectedModel.name}
+          providerAddress={selectedModel.provider}
+          onClose={() => setSelectedModel(null)}
+        />
+      )}
     </div>
   );
 }

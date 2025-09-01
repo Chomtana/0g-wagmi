@@ -67,6 +67,162 @@ function AddFundsComponent() {
 }
 ```
 
+#### `use0gWithdrawFunds`
+Withdraw funds from the 0G broker:
+
+```tsx
+import { use0gWithdrawFunds } from '0g-wagmi'
+
+function WithdrawComponent() {
+  const { withdrawFunds, isLoading } = use0gWithdrawFunds({
+    onSuccess: (txHash) => {
+      console.log('Withdrawal successful:', txHash)
+    },
+    onError: (error) => {
+      console.error('Withdrawal failed:', error)
+    },
+  })
+
+  return (
+    <button 
+      onClick={() => withdrawFunds('0.05')}
+      disabled={isLoading}
+    >
+      {isLoading ? 'Withdrawing...' : 'Withdraw 0.05 OG'}
+    </button>
+  )
+}
+```
+
+#### `use0gServices`
+List available AI services on the 0G network:
+
+```tsx
+import { use0gServices } from '0g-wagmi'
+
+function ServicesComponent() {
+  const { services, isLoading, error } = use0gServices()
+
+  if (isLoading) return <div>Loading services...</div>
+  if (error) return <div>Error loading services</div>
+  
+  return (
+    <div>
+      {services?.map((service, index) => (
+        <div key={index}>
+          <h3>{service.model}</h3>
+          <p>Provider: {service.provider}</p>
+          <p>Input Price: {service.inputPrice.toString()} per 1M tokens</p>
+          <p>Output Price: {service.outputPrice.toString()} per 1M tokens</p>
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+#### `use0gChat`
+Interact with AI models on the 0G network:
+
+```tsx
+import { use0gChat } from '0g-wagmi'
+
+function ChatComponent({ providerAddress }: { providerAddress: string }) {
+  const { chat, isLoading, error } = use0gChat(providerAddress)
+  const [question, setQuestion] = useState('')
+  const [response, setResponse] = useState('')
+
+  const handleSubmit = async () => {
+    try {
+      const answer = await chat(question)
+      setResponse(answer)
+    } catch (err) {
+      console.error('Chat error:', err)
+    }
+  }
+
+  return (
+    <div>
+      <input 
+        value={question}
+        onChange={(e) => setQuestion(e.target.value)}
+        placeholder="Ask a question..."
+      />
+      <button onClick={handleSubmit} disabled={isLoading}>
+        {isLoading ? 'Processing...' : 'Send'}
+      </button>
+      {response && <div>Response: {response}</div>}
+      {error && <div>Error: {error}</div>}
+    </div>
+  )
+}
+```
+
+#### `use0gInferenceBalance`
+Query inference-specific balance for a provider:
+
+```tsx
+import { use0gInferenceBalance } from '0g-wagmi'
+
+function InferenceBalanceComponent({ providerAddress }: { providerAddress: string }) {
+  const { balance, isLoading, error, refetch } = use0gInferenceBalance(providerAddress)
+
+  if (isLoading) return <div>Loading balance...</div>
+  if (error) return <div>Error loading balance</div>
+  
+  return (
+    <div>
+      <p>Allocated Credit: {balance ? (Number(balance) / 1e18).toFixed(6) : '0'} OG</p>
+      <button onClick={() => refetch()}>Refresh</button>
+    </div>
+  )
+}
+```
+
+#### `use0gInferenceAddFunds`
+Add funds to a specific inference provider:
+
+```tsx
+import { use0gInferenceAddFunds } from '0g-wagmi'
+
+function AddInferenceFundsComponent({ providerAddress }: { providerAddress: string }) {
+  const { addFunds, isLoading } = use0gInferenceAddFunds()
+
+  const handleAddFunds = async () => {
+    try {
+      await addFunds(providerAddress, '0.1')
+      console.log('Funds added successfully')
+    } catch (err) {
+      console.error('Failed to add funds:', err)
+    }
+  }
+
+  return (
+    <button onClick={handleAddFunds} disabled={isLoading}>
+      {isLoading ? 'Adding...' : 'Add 0.1 OG to Provider'}
+    </button>
+  )
+}
+```
+
+#### `use0gBroker`
+Get the underlying 0G broker instance:
+
+```tsx
+import { use0gBroker } from '0g-wagmi'
+
+function BrokerComponent() {
+  const { broker, isLoading, error } = use0gBroker()
+
+  if (isLoading) return <div>Initializing broker...</div>
+  if (error) return <div>Error: {error.message}</div>
+  if (!broker) return <div>Connect wallet to continue</div>
+  
+  // Use broker directly for advanced operations
+  return <div>Broker initialized</div>
+}
+```
+
 ## Polyfills
 
 The `@0glabs/0g-serving-broker` package depends on several Node.js server-side modules that are not available in the browser. To prevent build errors, make sure to exclude these modules from the Vite build process by creating `app/empty.js` and updating your configuration as shown below. You also need to include a Buffer polyfill.

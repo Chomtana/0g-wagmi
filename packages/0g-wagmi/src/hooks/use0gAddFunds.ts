@@ -54,8 +54,8 @@ export function use0gAddFunds({
   });
 
   const addFunds = useCallback(
-    async (amount: string) => {
-      return mutation.mutateAsync(amount);
+    async (amount: string | number) => {
+      return mutation.mutateAsync(amount.toString());
     },
     [mutation]
   );

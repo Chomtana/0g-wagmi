@@ -33,9 +33,13 @@ export function use0gChat(providerAddress: string): Use0gChatReturn {
         const { endpoint, model } = await broker.inference.getServiceMetadata(
           providerAddress
         );
+
+        // Prepare messages
+        const messages = [{ role: "user", content: question }];
+
         const headers = await broker.inference.getRequestHeaders(
           providerAddress,
-          question
+          JSON.stringify(messages)
         );
 
         // Send request to the service
@@ -46,7 +50,7 @@ export function use0gChat(providerAddress: string): Use0gChatReturn {
             ...headers,
           },
           body: JSON.stringify({
-            messages: [{ role: "user", content: question }],
+            messages,
             model: model,
           }),
         });

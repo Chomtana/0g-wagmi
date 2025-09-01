@@ -2,23 +2,30 @@ import { useState, useCallback } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { createZGComputeNetworkBroker } from "@0glabs/0g-serving-broker";
 import { useEthersSigner } from "./useEthersSigner";
+import { parseEther } from "viem";
 
-export interface Use0gWithdrawFundsParams {
+export interface Use0gAddFundsParams {
   chainId?: number;
   onSuccess?: (txHash: string) => void;
   onError?: (error: Error) => void;
 }
 
-export function use0gWithdrawFunds({
+export function use0gInferenceAddFunds({
   chainId,
   onSuccess,
   onError,
-}: Use0gWithdrawFundsParams = {}) {
+}: Use0gAddFundsParams = {}) {
   const signer = useEthersSigner({ chainId });
   const [isLoading, setIsLoading] = useState(false);
 
   const mutation = useMutation({
-    mutationFn: async (amount: string) => {
+    mutationFn: async ({
+      providerAddress,
+      amount,
+    }: {
+      providerAddress: string;
+      amount: string;
+    }) => {
       if (!signer) {
         throw new Error("No wallet connected");
       }
@@ -28,7 +35,18 @@ export function use0gWithdrawFunds({
       try {
         const broker = await createZGComputeNetworkBroker(signer);
         await broker.ledger.getLedger();
-        await broker.ledger.refund(parseFloat(amount));
+        await broker.ledger.transferFund(
+          providerAddress,
+          "inference",
+          parseEther(amount)
+        );
+      } catch (error: any) {
+        if (error.message.includes("Account does not exist")) {
+          const broker = await createZGComputeNetworkBroker(signer);
+          await broker.ledger.addLedger(parseFloat(amount));
+        }
+
+        throw error;
       } finally {
         setIsLoading(false);
       }
@@ -46,15 +64,18 @@ export function use0gWithdrawFunds({
     },
   });
 
-  const withdrawFunds = useCallback(
-    async (amount: string | number) => {
-      return mutation.mutateAsync(amount.toString());
+  const addFunds = useCallback(
+    async (providerAddress: string, amount: string | number) => {
+      return mutation.mutateAsync({
+        providerAddress,
+        amount: amount.toString(),
+      });
     },
     [mutation]
   );
 
   return {
-    withdrawFunds,
+    addFunds,
     isLoading: isLoading || mutation.isPending,
     isSuccess: mutation.isSuccess,
     isError: mutation.isError,

@@ -42,7 +42,10 @@ export function use0gBalance({
           availableBalance: BigInt(availableBalance),
         };
       } catch (error: any) {
-        if (error.message.includes("Account does not exist")) {
+        if (
+          error.message.includes("Account does not exist") ||
+          error.message.includes("AccountNotExists")
+        ) {
           return {
             totalBalance: BigInt(0),
             availableBalance: BigInt(0),

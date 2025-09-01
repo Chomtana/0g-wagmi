@@ -8,6 +8,15 @@ export {
   type Use0gBalanceParams,
   type LedgerAccount,
 } from "./hooks/use0gBalance";
+export {
+  use0gInferenceBalance,
+  type Use0gInferenceBalanceParams,
+  type LedgerInferenceAccount,
+} from "./hooks/use0gInferenceBalance";
+export {
+  use0gInferenceAddFunds,
+  type Use0gInferenceAddFundsParams,
+} from "./hooks/use0gInferenceAddFunds";
 export { use0gBroker } from "./hooks/use0gBroker";
 export { use0gServices } from "./hooks/use0gServices";
 export { use0gChat, type Use0gChatReturn } from "./hooks/use0gChat";

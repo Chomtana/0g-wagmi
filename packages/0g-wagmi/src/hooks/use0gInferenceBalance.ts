@@ -55,7 +55,10 @@ export function use0gInferenceBalance(
           pendingRefund: BigInt(pendingRefund),
         };
       } catch (error: any) {
-        if (error.message.includes("Account does not exist")) {
+        if (
+          error.message.includes("Account does not exist") ||
+          error.message.includes("AccountNotExists")
+        ) {
           return {
             balance: BigInt(0),
             availableBalance: BigInt(0),

@@ -4,7 +4,7 @@ import { createZGComputeNetworkBroker } from "@0glabs/0g-serving-broker";
 import { useEthersSigner } from "./useEthersSigner";
 import { parseEther } from "viem";
 
-export interface Use0gAddFundsParams {
+export interface Use0gInferenceAddFundsParams {
   chainId?: number;
   onSuccess?: (txHash: string) => void;
   onError?: (error: Error) => void;
@@ -14,7 +14,7 @@ export function use0gInferenceAddFunds({
   chainId,
   onSuccess,
   onError,
-}: Use0gAddFundsParams = {}) {
+}: Use0gInferenceAddFundsParams = {}) {
   const signer = useEthersSigner({ chainId });
   const [isLoading, setIsLoading] = useState(false);
 

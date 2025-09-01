@@ -1,12 +1,11 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Cpu, Zap, Brain, Copy } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { useEffect, useState, type ReactNode } from "react";
+import { Brain } from "lucide-react";
+import { useEffect, useState } from "react";
 import { use0gServices } from "0g-wagmi";
 import { formatEther } from "viem";
 import { ChatModal } from "@/components/ChatModal";
+import { ModelCard } from "@/components/ModelCard";
+import { AddCreditModal } from "@/components/AddCreditModal";
 
 interface Model {
   id: number;
@@ -62,9 +61,9 @@ interface Model {
 // ];
 
 export function ModelsSection() {
-  const { toast } = useToast();
   const [models, setModels] = useState<Model[]>([]);
   const [selectedModel, setSelectedModel] = useState<Model | null>(null);
+  const [addCreditModel, setAddCreditModel] = useState<Model | null>(null);
   const { services, isLoading } = use0gServices();
 
   useEffect(() => {
@@ -84,34 +83,26 @@ export function ModelsSection() {
     );
   }, [services]);
 
-  const truncateAddress = (address: string) => {
-    if (address.length <= 14) return address;
-    return `${address.slice(0, 8)}...${address.slice(-6)}`;
-  };
-
-  const copyToClipboard = async (text: string) => {
-    await navigator.clipboard.writeText(text);
-    toast({
-      title: "Copied!",
-      description: "Address copied to clipboard",
-    });
-  };
-
   const ModelSkeleton = () => (
-    <Card className="hover:shadow-lg transition-shadow">
-      <CardHeader className="pb-4">
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <Skeleton className="h-10 w-10 rounded-lg" />
-            <Skeleton className="h-6 w-32" />
-          </div>
+    <div className="hover:shadow-lg transition-shadow p-6 border rounded-lg">
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Skeleton className="h-8 w-8 rounded-lg" />
+          <Skeleton className="h-6 w-32" />
         </div>
-      </CardHeader>
-      <CardContent className="space-y-4">
+        
         <div>
           <Skeleton className="h-4 w-24 mb-1" />
           <div className="flex items-center gap-2">
             <Skeleton className="h-6 w-24 rounded" />
+            <Skeleton className="h-6 w-6" />
+          </div>
+        </div>
+
+        <div>
+          <Skeleton className="h-4 w-24 mb-1" />
+          <div className="flex items-center gap-2">
+            <Skeleton className="h-6 w-20" />
             <Skeleton className="h-6 w-6" />
           </div>
         </div>
@@ -130,8 +121,8 @@ export function ModelsSection() {
         </div>
 
         <Skeleton className="h-8 w-full" />
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 
   return (
@@ -141,74 +132,12 @@ export function ModelsSection() {
         {isLoading
           ? Array.from({ length: 6 }).map((_, i) => <ModelSkeleton key={i} />)
           : models.map((model) => (
-              <Card
+              <ModelCard
                 key={model.id}
-                className="hover:shadow-lg transition-shadow"
-              >
-                <CardHeader className="pb-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-2">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary/10 text-primary">
-                        <Brain className="h-5 w-5" />
-                      </div>
-                      <CardTitle className="text-lg">{model.name}</CardTitle>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <p className="text-sm font-medium text-muted-foreground mb-1">
-                      Provider Address
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <p className="text-xs font-mono bg-muted py-1">
-                        {truncateAddress(model.provider)}
-                      </p>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="h-6 w-6 p-0 hover:cursor-pointer"
-                        onClick={() => copyToClipboard(model.provider)}
-                      >
-                        <Copy className="h-3 w-3" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground mb-1">
-                        Input Price
-                      </p>
-                      <p className="text-lg font-bold text-primary">
-                        {model.inputPrice} OG
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        per 1M tokens
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-muted-foreground mb-1">
-                        Output Price
-                      </p>
-                      <p className="text-lg font-bold text-primary">
-                        {model.outputPrice} OG
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        per 1M tokens
-                      </p>
-                    </div>
-                  </div>
-
-                  <Button 
-                    className="w-full hover:cursor-pointer" 
-                    size="sm"
-                    onClick={() => setSelectedModel(model)}
-                  >
-                    Use Model
-                  </Button>
-                </CardContent>
-              </Card>
+                model={model}
+                onUseModel={setSelectedModel}
+                onAddCredit={setAddCreditModel}
+              />
             ))}
       </div>
       
@@ -217,6 +146,14 @@ export function ModelsSection() {
           modelName={selectedModel.name}
           providerAddress={selectedModel.provider}
           onClose={() => setSelectedModel(null)}
+        />
+      )}
+      
+      {addCreditModel && (
+        <AddCreditModal
+          modelName={addCreditModel.name}
+          providerAddress={addCreditModel.provider}
+          onClose={() => setAddCreditModel(null)}
         />
       )}
     </div>

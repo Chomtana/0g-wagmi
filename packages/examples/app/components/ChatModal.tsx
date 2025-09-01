@@ -23,7 +23,7 @@ export function ChatModal({
   providerAddress,
   onClose,
 }: ChatModalProps) {
-  const { chat, isLoading } = use0gChat(providerAddress);
+  const { chat, isLoading, error } = use0gChat(providerAddress);
   const { toast } = useToast();
   const [question, setQuestion] = useState("");
   const [response, setResponse] = useState("");
@@ -129,14 +129,14 @@ export function ChatModal({
             pricing.
           </div>
 
-          <div
-            className="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 rounded-md text-sm mt-2"
-            role="alert"
-          >
-            I am stucking with "Provider proxy: handle proxied service, validate
-            request: invalid signature" error, please check my message on
-            telegram group!
-          </div>
+          {error && (
+            <div
+              className="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 rounded-md text-sm mt-2"
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

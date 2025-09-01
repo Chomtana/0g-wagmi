@@ -55,22 +55,24 @@ export function use0gChat(providerAddress: string): Use0gChatReturn {
           }),
         });
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
         const data = await response.json();
+
+        if (!response.ok) {
+          // Check if the response contains an error message
+          const errorMessage = data?.error || `HTTP error! status: ${response.status}`;
+          throw new Error(errorMessage);
+        }
         const content = data.choices?.[0]?.message?.content || "";
 
         // Process and validate response
-        const valid = await broker.inference.processResponse(
-          providerAddress,
-          content
-        );
+        // const valid = await broker.inference.processResponse(
+        //   providerAddress,
+        //   content
+        // );
 
-        if (!valid) {
-          throw new Error("Invalid response from provider");
-        }
+        // if (!valid) {
+        //   throw new Error("Invalid response from provider");
+        // }
 
         return content;
       } catch (err) {

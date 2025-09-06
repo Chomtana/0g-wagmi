@@ -28,12 +28,12 @@ export {
 
 export const ZG_TESTNET_CONFIG = {
   rpcUrl: "https://evmrpc-testnet.0g.ai",
-  chainId: 16600,
-  chainName: "0G Testnet",
+  chainId: 16601,
+  chainName: "0G Galileo Testnet",
   nativeCurrency: {
     name: "0G",
     symbol: "OG",
     decimals: 18,
   },
-  blockExplorerUrl: "https://testnet.0g.ai",
+  blockExplorerUrl: "https://chainscan-galileo.0g.ai",
 } as const;

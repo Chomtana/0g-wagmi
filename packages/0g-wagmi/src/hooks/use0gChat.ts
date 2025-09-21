@@ -113,6 +113,7 @@ export function use0gChat(providerAddress: string): Use0gChatReturn {
                 if (!line.startsWith("data:")) continue;
                 const payload = line.slice(5).trim();
                 if (payload === "[DONE]") {
+                  onMessage(full);
                   return full;
                 }
                 try {
@@ -127,7 +128,7 @@ export function use0gChat(providerAddress: string): Use0gChatReturn {
 
                   if (token) {
                     full += token;
-                    onMessage(token);
+                    onMessage(full);
                   }
                 } catch {
                   // ignore

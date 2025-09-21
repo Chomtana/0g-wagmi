@@ -2,8 +2,33 @@ import { useState, useCallback } from "react";
 import { createZGComputeNetworkBroker } from "@0glabs/0g-serving-broker";
 import { useEthersSigner } from "./useEthersSigner";
 
+export type ChatMessage = {
+  role: string; // "system" | "developer" | "user" | "assistant" | "tool" | "function"
+  content:
+    | string
+    | Array<
+        | { type: "text"; text: string }
+        | {
+            type: "image_url";
+            image_url:
+              | string
+              | { url: string; detail?: "low" | "high" | "auto" };
+          }
+      >;
+  name?: string;
+  tool_call_id?: string; // only for tool replies
+  tool_calls?: Array<{
+    id: string;
+    type: "function";
+    function: { name: string; arguments: string };
+  }>;
+};
+
 export interface Use0gChatReturn {
-  chat: (question: string) => Promise<string>;
+  chat: (
+    question: string,
+    onMessage?: (message: string) => any
+  ) => Promise<string>;
   isLoading: boolean;
   error: string | null;
 }
@@ -14,7 +39,10 @@ export function use0gChat(providerAddress: string): Use0gChatReturn {
   const [error, setError] = useState<string | null>(null);
 
   const chat = useCallback(
-    async (question: string): Promise<string> => {
+    async (
+      question: string | ChatMessage[],
+      onMessage?: (message: string) => any
+    ): Promise<string> => {
       if (!signer) {
         throw new Error("No signer available. Please connect your wallet.");
       }
@@ -35,7 +63,10 @@ export function use0gChat(providerAddress: string): Use0gChatReturn {
         );
 
         // Prepare messages
-        const messages = [{ role: "user", content: question }];
+        const messages: ChatMessage[] =
+          typeof question === "string"
+            ? [{ role: "user", content: question }]
+            : question;
 
         const headers = await broker.inference.getRequestHeaders(
           providerAddress,
@@ -52,29 +83,73 @@ export function use0gChat(providerAddress: string): Use0gChatReturn {
           body: JSON.stringify({
             messages,
             model: model,
+            stream: Boolean(onMessage),
           }),
         });
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          // Check if the response contains an error message
-          const errorMessage = data?.error || `HTTP error! status: ${response.status}`;
-          throw new Error(errorMessage);
+        if (!response.ok || !response.body) {
+          const detail = await response.text().catch(() => "");
+          throw new Error(`0g error ${response.status}: ${detail}`);
         }
-        const content = data.choices?.[0]?.message?.content || "";
 
-        // Process and validate response
-        // const valid = await broker.inference.processResponse(
-        //   providerAddress,
-        //   content
-        // );
+        if (onMessage) {
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+          let buffer = "";
+          let full = "";
 
-        // if (!valid) {
-        //   throw new Error("Invalid response from provider");
-        // }
+          while (true) {
+            const { value, done } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
 
-        return content;
+            // Generic SSE parse
+            let j;
+            while ((j = buffer.indexOf("\n\n")) !== -1) {
+              const frame = buffer.slice(0, j);
+              buffer = buffer.slice(j + 2);
+
+              for (const line of frame.split("\n")) {
+                if (!line.startsWith("data:")) continue;
+                const payload = line.slice(5).trim();
+                if (payload === "[DONE]") {
+                  return full;
+                }
+                try {
+                  // The Responses stream includes events that carry text deltas.
+                  // We defensively check a few common shapes.
+                  const evt = JSON.parse(payload) as any;
+                  const token =
+                    evt.delta?.output_text ??
+                    evt.output_text?.delta ??
+                    evt.text ??
+                    "";
+
+                  if (token) {
+                    full += token;
+                    onMessage(token);
+                  }
+                } catch {
+                  // ignore
+                }
+              }
+            }
+          }
+
+          return full;
+        } else {
+          const data = await response.json();
+
+          if (!response.ok) {
+            // Check if the response contains an error message
+            const errorMessage =
+              data?.error || `HTTP error! status: ${response.status}`;
+            throw new Error(errorMessage);
+          }
+          const content = data.choices?.[0]?.message?.content || "";
+
+          return content;
+        }
       } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : "An error occurred";

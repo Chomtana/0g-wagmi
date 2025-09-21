@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Brain, Copy, Plus } from "lucide-react";
+import { Brain, Copy, Plus, MessageSquare } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { use0gInferenceBalance } from "0g-wagmi";
 import { formatEther } from "viem";
+import { useNavigate } from "react-router";
 
 interface Model {
   id: number;
@@ -21,6 +22,7 @@ interface ModelCardProps {
 
 export function ModelCard({ model, onUseModel, onAddCredit }: ModelCardProps) {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const { balance: allocatedCredit, isLoading: balanceLoading } =
     use0gInferenceBalance(model.provider);
 
@@ -116,13 +118,24 @@ export function ModelCard({ model, onUseModel, onAddCredit }: ModelCardProps) {
           </div>
         </div>
 
-        <Button
-          className="w-full hover:cursor-pointer"
-          size="sm"
-          onClick={() => onUseModel(model)}
-        >
-          Use Model
-        </Button>
+        <div className="grid grid-cols-2 gap-2">
+          <Button
+            className="hover:cursor-pointer"
+            size="sm"
+            variant="outline"
+            onClick={() => onUseModel(model)}
+          >
+            Quick Chat
+          </Button>
+          <Button
+            className="hover:cursor-pointer"
+            size="sm"
+            onClick={() => navigate("/chat")}
+          >
+            <MessageSquare className="h-4 w-4 mr-1" />
+            Full Chat
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

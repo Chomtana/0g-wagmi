@@ -27,13 +27,19 @@ export {
 } from "./adapters/ethers";
 
 export const ZG_TESTNET_CONFIG = {
-  rpcUrl: "https://evmrpc-testnet.0g.ai",
-  chainId: 16601,
-  chainName: "0G Galileo Testnet",
+  id: 16601,
+  name: "0G Testnet",
   nativeCurrency: {
+    decimals: 18,
     name: "0G",
     symbol: "OG",
-    decimals: 18,
   },
-  blockExplorerUrl: "https://chainscan-galileo.0g.ai",
+  rpcUrls: {
+    default: { http: ["https://evmrpc-testnet.0g.ai"] },
+    public: { http: ["https://evmrpc-testnet.0g.ai"] },
+  },
+  blockExplorers: {
+    default: { name: "0G Explorer", url: "https://chainscan-galileo.0g.ai" },
+  },
+  testnet: true,
 } as const;

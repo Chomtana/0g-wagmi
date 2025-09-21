@@ -3,6 +3,7 @@ import { WagmiProvider, type Config } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { WagmiAdapter } from "@reown/appkit-adapter-wagmi";
 import { type ReactNode } from "react";
+import { ZG_TESTNET_CONFIG } from "0g-wagmi";
 
 const projectId = import.meta.env.VITE_REOWN_PROJECT_ID || "YOUR_PROJECT_ID";
 
@@ -13,25 +14,7 @@ const metadata = {
   icons: ["https://0g.ai/favicon.ico"],
 };
 
-const zgTestnet = {
-  id: 16601,
-  name: "0G Testnet",
-  nativeCurrency: {
-    decimals: 18,
-    name: "0G",
-    symbol: "OG",
-  },
-  rpcUrls: {
-    default: { http: ["https://evmrpc-testnet.0g.ai"] },
-    public: { http: ["https://evmrpc-testnet.0g.ai"] },
-  },
-  blockExplorers: {
-    default: { name: "0G Explorer", url: "https://chainscan-galileo.0g.ai" },
-  },
-  testnet: true,
-} as const;
-
-const chains = [zgTestnet];
+const chains = [ZG_TESTNET_CONFIG];
 
 const wagmiAdapter = new WagmiAdapter({
   projectId,

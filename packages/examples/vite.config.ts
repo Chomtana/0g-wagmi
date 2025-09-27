@@ -8,9 +8,17 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      child_process: "/src/empty.js",
+      "fs/promises": "/src/empty.js",
+      fs: "/src/empty.js",
+      path: "/src/empty.js",
     },
   },
-  css: {
-    postcss: "./postcss.config.js",
+  define: {
+    global: "globalThis",
+  },
+  optimizeDeps: {
+    include: ["buffer"],
+    exclude: ["child_process", "fs/promises", "fs", "path"],
   },
 });

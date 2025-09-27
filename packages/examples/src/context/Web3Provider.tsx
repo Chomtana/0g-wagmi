@@ -24,7 +24,7 @@ const wagmiAdapter = new WagmiAdapter({
 createAppKit({
   adapters: [wagmiAdapter],
   projectId,
-  networks: chains as any,
+  networks: chains as [(typeof chains)[0], ...typeof chains],
   metadata,
   features: {
     analytics: true,

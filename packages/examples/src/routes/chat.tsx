@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
-import { use0gChat, type ChatMessage } from "0g-wagmi";
+import { use0gChat } from "0g-wagmi";
 import { useAccount } from "wagmi";
-import { useNavigate } from "react-router";
+import { Link } from "react-router";
 
 const PROVIDER_ADDRESS = "0x08bac9d7ca27a09c9c27b696f39ed4e90c616c2b";
 
@@ -13,7 +13,6 @@ type DisplayMessage = {
 };
 
 export default function ChatPage() {
-  const navigate = useNavigate();
   const { isConnected } = useAccount();
   const { chat, isLoading } = use0gChat(PROVIDER_ADDRESS);
 
@@ -24,12 +23,6 @@ export default function ChatPage() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (!isConnected) {
-      navigate("/");
-    }
-  }, [isConnected, navigate]);
 
   useEffect(() => {
     scrollToBottom();
@@ -121,8 +114,8 @@ export default function ChatPage() {
       <div className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-4xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <button
-              onClick={() => navigate("/")}
+            <Link
+              to="/"
               className="text-gray-600 hover:text-gray-900 hover:cursor-pointer"
             >
               <svg
@@ -138,7 +131,7 @@ export default function ChatPage() {
                   d="M15 19l-7-7 7-7"
                 />
               </svg>
-            </button>
+            </Link>
             <h1 className="text-xl font-semibold text-gray-900">0G Chat</h1>
           </div>
           <button

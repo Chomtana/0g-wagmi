@@ -1,22 +1,9 @@
-"use client";
-
 import { Brain } from "lucide-react";
 import { ConnectButton } from "@/components/ConnectButton";
 import { CreditSection } from "@/components/CreditSection";
 import { ModelsSection } from "@/components/ModelsSection";
-import type { Route } from "./+types/home";
 
-export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "0g-wagmi Demo" },
-    {
-      name: "description",
-      content: "AI Model Marketplace powered by 0G Network",
-    },
-  ];
-}
-
-export default function AIMarketplacePage() {
+export default function HomePage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}

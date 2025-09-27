@@ -1,23 +1,16 @@
-import { reactRouter } from "@react-router/dev/vite";
-import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
+import react from "@vitejs/plugin-react";
+import path from "path";
 
+// https://vite.dev/config/
 export default defineConfig({
-  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+  plugins: [react()],
   resolve: {
     alias: {
-      child_process: "/app/empty.js",
-      "fs/promises": "/app/empty.js",
-      fs: "/app/empty.js",
-      path: "/app/empty.js",
+      "@": path.resolve(__dirname, "./src"),
     },
   },
-  define: {
-    global: "globalThis",
-  },
-  optimizeDeps: {
-    include: ["buffer"],
-    exclude: ["child_process", "fs/promises", "fs", "path"],
+  css: {
+    postcss: "./postcss.config.js",
   },
 });

@@ -17,7 +17,13 @@
     "dev": "tsup --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["0g", "wagmi", "ethereum", "web3", "hooks"],
+  "keywords": [
+    "0g",
+    "wagmi",
+    "ethereum",
+    "web3",
+    "hooks"
+  ],
   "author": "",
   "license": "MIT",
   "packageManager": "pnpm@10.11.0",
@@ -37,7 +43,7 @@
     "react": "^19.1.0",
     "tsup": "^8.3.6",
     "typescript": "^5.8.3",
-    "viem": "^2.22.5",
-    "wagmi": "^2.15.3"
+    "viem": "^2.37.8",
+    "wagmi": "^2.17.5"
   }
 }

@@ -6,7 +6,7 @@ import HomePage from "./routes/home";
 import ChatPage from "./routes/chat";
 
 // Import global styles
-import "./app.css";
+import "./App.css";
 
 // Create router configuration
 const router = createBrowserRouter([

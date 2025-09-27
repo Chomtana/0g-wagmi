@@ -66,6 +66,8 @@ export function ModelsSection() {
   const [addCreditModel, setAddCreditModel] = useState<Model | null>(null);
   const { services, isLoading } = use0gServices();
 
+  console.log("services", services);
+
   useEffect(() => {
     setModels(
       services?.map((service, i) => ({
@@ -90,7 +92,7 @@ export function ModelsSection() {
           <Skeleton className="h-8 w-8 rounded-lg" />
           <Skeleton className="h-6 w-32" />
         </div>
-        
+
         <div>
           <Skeleton className="h-4 w-24 mb-1" />
           <div className="flex items-center gap-2">
@@ -140,7 +142,7 @@ export function ModelsSection() {
               />
             ))}
       </div>
-      
+
       {selectedModel && (
         <ChatModal
           modelName={selectedModel.name}
@@ -148,7 +150,7 @@ export function ModelsSection() {
           onClose={() => setSelectedModel(null)}
         />
       )}
-      
+
       {addCreditModel && (
         <AddCreditModal
           modelName={addCreditModel.name}

@@ -19,27 +19,13 @@ export {
 } from "./hooks/use0gInferenceAddFunds";
 export { use0gBroker } from "./hooks/use0gBroker";
 export { use0gServices } from "./hooks/use0gServices";
-export { use0gChat, type Use0gChatReturn } from "./hooks/use0gChat";
+export {
+  use0gChat,
+  type Use0gChatReturn,
+  type ChatMessage,
+} from "./hooks/use0gChat";
 export { useEthersSigner } from "./hooks/useEthersSigner";
 export {
   walletClientToSigner,
   publicClientToProvider,
 } from "./adapters/ethers";
-
-export const ZG_TESTNET_CONFIG = {
-  id: 16601,
-  name: "0G Testnet",
-  nativeCurrency: {
-    decimals: 18,
-    name: "0G",
-    symbol: "OG",
-  },
-  rpcUrls: {
-    default: { http: ["https://evmrpc-testnet.0g.ai"] },
-    public: { http: ["https://evmrpc-testnet.0g.ai"] },
-  },
-  blockExplorers: {
-    default: { name: "0G Explorer", url: "https://chainscan-galileo.0g.ai" },
-  },
-  testnet: true,
-} as const;

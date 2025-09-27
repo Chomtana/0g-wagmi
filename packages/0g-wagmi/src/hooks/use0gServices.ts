@@ -24,6 +24,9 @@ export function use0gServices({ chainId }: { chainId?: number } = {}) {
     enabled: !!broker,
   });
 
+  console.log("services", services);
+  console.log("error", error);
+
   return {
     services,
     isLoading: isLoading || brokerLoading,

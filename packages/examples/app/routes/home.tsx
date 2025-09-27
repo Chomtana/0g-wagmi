@@ -30,7 +30,11 @@ export default function AIMarketplacePage() {
               0g-wagmi <span className="hidden sm:inline">Demo</span>
             </span>
           </div>
-          <ConnectButton />
+          <div className="flex">
+            {/* @ts-ignore */}
+            <appkit-network-button />
+            <ConnectButton />
+          </div>
         </div>
       </header>
 

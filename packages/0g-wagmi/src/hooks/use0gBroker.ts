@@ -38,6 +38,9 @@ export function use0gBroker({ chainId }: { chainId?: number } = {}) {
     staleTime: Infinity,
   });
 
+  console.log("broker", broker);
+  console.log("error", error);
+
   return {
     broker,
     isLoading,

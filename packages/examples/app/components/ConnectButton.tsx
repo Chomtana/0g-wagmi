@@ -1,3 +1,4 @@
 export function ConnectButton() {
-  return <appkit-button />
+  // @ts-ignore
+  return <appkit-button />;
 }

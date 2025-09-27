@@ -3,4 +3,9 @@ packages:
 onlyBuiltDependencies:
   - '@reown/appkit'
   - '@tailwindcss/oxide'
+  - blake-hash
+  - bufferutil
+  - es5-ext
   - esbuild
+  - keccak
+  - utf-8-validate

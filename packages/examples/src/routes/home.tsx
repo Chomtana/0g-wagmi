@@ -17,7 +17,10 @@ export default function HomePage() {
               0g-wagmi <span className="hidden sm:inline">Demo</span>
             </span>
           </div>
-          <ConnectButton />
+          <div className="flex items-center space-x-2">
+            <appkit-network-button />
+            <ConnectButton />
+          </div>
         </div>
       </header>
 

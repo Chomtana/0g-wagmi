@@ -1,24 +1,26 @@
 import { useState, useRef, useEffect } from "react";
 import { use0gChat } from "0g-wagmi";
 import { useAccount } from "wagmi";
-import { Link } from "react-router";
-
-const PROVIDER_ADDRESS = "0x08bac9d7ca27a09c9c27b696f39ed4e90c616c2b";
+import { Link, useParams } from "react-router";
 
 type DisplayMessage = {
   id: string;
   role: "user" | "assistant";
   content: string;
+  reason?: string;
   isStreaming?: boolean;
 };
 
 export default function ChatPage() {
   const { isConnected } = useAccount();
-  const { chat, isLoading } = use0gChat(PROVIDER_ADDRESS);
+  const { providerAddress } = useParams();
+  const { chat, isLoading } = use0gChat(providerAddress || "0x");
 
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [currentStreamingMessage, setCurrentStreamingMessage] =
+    useState<string>("");
+  const [currentStreamingReason, setCurrentStreamingReason] =
     useState<string>("");
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -26,7 +28,7 @@ export default function ChatPage() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, currentStreamingMessage]);
+  }, [messages, currentStreamingMessage, currentStreamingReason]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -44,11 +46,13 @@ export default function ChatPage() {
     setMessages((prev) => [...prev, userMessage]);
     setInputValue("");
     setCurrentStreamingMessage("");
+    setCurrentStreamingReason("");
 
     const assistantMessageId = (Date.now() + 1).toString();
 
     try {
       let fullMessage = "";
+      let fullReason = "";
 
       // Add initial assistant message placeholder
       setMessages((prev) => [
@@ -61,19 +65,25 @@ export default function ChatPage() {
         },
       ]);
 
-      await chat(inputValue.trim(), (fullMessage: string) => {
-        setCurrentStreamingMessage(fullMessage);
+      await chat(inputValue.trim(), (message: string, reason: string) => {
+        console.log("fullMessage", message);
+        console.log("reason", reason);
+        fullMessage = message;
+        fullReason = reason;
+        setCurrentStreamingMessage(message);
+        setCurrentStreamingReason(reason);
       });
 
       // Update the assistant message with final content
       setMessages((prev) =>
         prev.map((msg) =>
           msg.id === assistantMessageId
-            ? { ...msg, content: fullMessage, isStreaming: false }
+            ? { ...msg, content: fullMessage, reason: fullReason, isStreaming: false }
             : msg
         )
       );
       setCurrentStreamingMessage("");
+      setCurrentStreamingReason("");
     } catch (error) {
       console.error("Chat error:", error);
       setMessages((prev) =>
@@ -89,6 +99,7 @@ export default function ChatPage() {
         )
       );
       setCurrentStreamingMessage("");
+      setCurrentStreamingReason("");
     }
   };
 
@@ -102,6 +113,7 @@ export default function ChatPage() {
   const handleClearChat = () => {
     setMessages([]);
     setCurrentStreamingMessage("");
+    setCurrentStreamingReason("");
   };
 
   if (!isConnected) {
@@ -205,6 +217,18 @@ export default function ChatPage() {
                         </div>
                       )}
                       <div className="flex-1">
+                        {message.role === "assistant" && (message.reason || (message.isStreaming && currentStreamingReason)) && (
+                          <details className="mb-2 bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
+                            <summary className="px-3 py-2 text-sm font-medium text-gray-700 hover:cursor-pointer hover:bg-gray-100">
+                              💭 Thinking process
+                            </summary>
+                            <div className="px-3 py-2 text-sm text-gray-600 border-t border-gray-200 whitespace-pre-wrap">
+                              {message.isStreaming
+                                ? currentStreamingReason || "Thinking..."
+                                : message.reason}
+                            </div>
+                          </details>
+                        )}
                         <p className="whitespace-pre-wrap">
                           {message.isStreaming
                             ? currentStreamingMessage || "..."

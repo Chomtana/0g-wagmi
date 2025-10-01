@@ -27,7 +27,7 @@ export type ChatMessage = {
 export interface Use0gChatReturn {
   chat: (
     question: string,
-    onMessage?: (message: string) => any
+    onMessage?: (message: string, reason: string) => any
   ) => Promise<string>;
   isLoading: boolean;
   error: string | null;
@@ -41,7 +41,7 @@ export function use0gChat(providerAddress: string): Use0gChatReturn {
   const chat = useCallback(
     async (
       question: string | ChatMessage[],
-      onMessage?: (message: string) => any
+      onMessage?: (message: string, reason: string) => any
     ): Promise<string> => {
       if (!signer) {
         throw new Error("No signer available. Please connect your wallet.");
@@ -97,6 +97,7 @@ export function use0gChat(providerAddress: string): Use0gChatReturn {
           const decoder = new TextDecoder();
           let buffer = "";
           let full = "";
+          let reason = "";
 
           while (true) {
             const { value, done } = await reader.read();
@@ -113,22 +114,27 @@ export function use0gChat(providerAddress: string): Use0gChatReturn {
                 if (!line.startsWith("data:")) continue;
                 const payload = line.slice(5).trim();
                 if (payload === "[DONE]") {
-                  onMessage(full);
+                  onMessage(full, reason);
                   return full;
                 }
                 try {
                   // The Responses stream includes events that carry text deltas.
                   // We defensively check a few common shapes.
                   const evt = JSON.parse(payload) as any;
-                  const token =
-                    evt.delta?.output_text ??
-                    evt.output_text?.delta ??
-                    evt.text ??
-                    "";
+                  console.log("evt", evt);
+                  const choice = evt.choices?.[0];
+                  const contentToken = choice?.delta?.content ?? "";
+                  const reasoningToken = choice?.delta?.reasoning_content ?? "";
 
-                  if (token) {
-                    full += token;
-                    onMessage(full);
+                  if (contentToken) {
+                    full += contentToken;
+                  }
+                  if (reasoningToken) {
+                    reason += reasoningToken;
+                  }
+
+                  if (contentToken || reasoningToken) {
+                    onMessage(full, reason);
                   }
                 } catch {
                   // ignore

@@ -20,7 +20,7 @@ const router = createBrowserRouter([
         element: <HomePage />,
       },
       {
-        path: "chat",
+        path: "chat/:providerAddress",
         element: <ChatPage />,
       },
     ],

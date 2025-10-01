@@ -1,5 +1,4 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { Brain } from "lucide-react";
 import { useEffect, useState } from "react";
 import { use0gServices } from "0g-wagmi";
 import { formatEther } from "viem";
@@ -90,7 +89,7 @@ export function ModelsSection() {
           <Skeleton className="h-8 w-8 rounded-lg" />
           <Skeleton className="h-6 w-32" />
         </div>
-        
+
         <div>
           <Skeleton className="h-4 w-24 mb-1" />
           <div className="flex items-center gap-2">
@@ -140,7 +139,7 @@ export function ModelsSection() {
               />
             ))}
       </div>
-      
+
       {selectedModel && (
         <ChatModal
           modelName={selectedModel.name}
@@ -148,7 +147,7 @@ export function ModelsSection() {
           onClose={() => setSelectedModel(null)}
         />
       )}
-      
+
       {addCreditModel && (
         <AddCreditModal
           modelName={addCreditModel.name}

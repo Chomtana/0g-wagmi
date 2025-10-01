@@ -119,21 +119,21 @@ export function ModelCard({ model, onUseModel, onAddCredit }: ModelCardProps) {
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <Button
+          {/* <Button
             className="hover:cursor-pointer"
             size="sm"
             variant="outline"
             onClick={() => onUseModel(model)}
           >
             Quick Chat
-          </Button>
+          </Button> */}
           <Button
             className="hover:cursor-pointer"
             size="sm"
-            onClick={() => navigate("/chat")}
+            onClick={() => navigate(`/chat/${model.provider}`)}
           >
             <MessageSquare className="h-4 w-4 mr-1" />
-            Full Chat
+            Chat
           </Button>
         </div>
       </CardContent>

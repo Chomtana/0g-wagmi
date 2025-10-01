@@ -10,7 +10,6 @@ import { useAccount } from "wagmi";
 export function ZGBrokerComponent() {
   const { address, isConnected } = useAccount();
   const [amount, setAmount] = useState("0.1");
-  const [status, setStatus] = useState<string>("");
 
   const {
     balance,
@@ -23,42 +22,42 @@ export function ZGBrokerComponent() {
 
   const { addFunds, isLoading: isAddingFunds } = use0gAddFunds({
     onSuccess: (txHash) => {
-      setStatus(`Success! Transaction: ${txHash}`);
+      console.log(`Success! Transaction: ${txHash}`);
       refetch();
       setAmount("");
     },
     onError: (error) => {
-      setStatus(`Error: ${error.message}`);
+      console.error(`Error: ${error.message}`);
     },
   });
 
   const { withdrawFunds, isLoading: isWithdrawingFunds } = use0gWithdrawFunds({
     onSuccess: (txHash) => {
-      setStatus(`Success! Transaction: ${txHash}`);
+      console.log(`Success! Transaction: ${txHash}`);
       refetch();
       setAmount("");
     },
   });
 
-  const { services, isLoading: isLoadingServices } = use0gServices();
+  const { services } = use0gServices();
 
   console.log("services", services);
 
   const handleAddFunds = async () => {
     if (!amount || parseFloat(amount) <= 0) {
-      setStatus("Please enter a valid amount");
+      console.error("Please enter a valid amount");
       return;
     }
-    setStatus("Adding funds...");
+    console.log("Adding funds...");
     await addFunds(amount);
   };
 
   const handleWithdrawFunds = async () => {
     if (!amount || parseFloat(amount) <= 0) {
-      setStatus("Please enter a valid amount");
+      console.error("Please enter a valid amount");
       return;
     }
-    setStatus("Withdrawing funds...");
+    console.log("Withdrawing funds...");
     await withdrawFunds(amount);
   };
 

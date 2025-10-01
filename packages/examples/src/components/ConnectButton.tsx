@@ -1,3 +1,3 @@
 export function ConnectButton() {
-  return <appkit-button />
+  return <appkit-button />;
 }

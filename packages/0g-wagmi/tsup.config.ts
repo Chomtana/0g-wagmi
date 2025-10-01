@@ -1,11 +1,20 @@
-import { defineConfig } from 'tsup'
+import { defineConfig } from "tsup";
 
 export default defineConfig({
-  entry: ['src/index.ts'],
-  format: ['cjs', 'esm'],
+  entry: ["src/index.ts"],
   dts: true,
-  splitting: false,
+  format: ["esm", "cjs"],
   sourcemap: true,
   clean: true,
-  external: ['react', 'wagmi', 'viem', '@tanstack/react-query'],
-})
+  external: [
+    "react",
+    "react-dom",
+    "wagmi",
+    "viem",
+    "@tanstack/react-query",
+    "ethers",
+    "@0glabs/0g-serving-broker",
+  ],
+  target: "es2020",
+  platform: "browser",
+});

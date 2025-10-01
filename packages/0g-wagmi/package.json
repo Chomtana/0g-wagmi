@@ -17,27 +17,34 @@
     "dev": "tsup --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": ["0g", "wagmi", "ethereum", "web3", "hooks"],
+  "keywords": [
+    "0g",
+    "wagmi",
+    "ethereum",
+    "web3",
+    "hooks"
+  ],
   "author": "",
   "license": "MIT",
   "packageManager": "pnpm@10.11.0",
   "peerDependencies": {
+    "@0glabs/0g-serving-broker": "^0.4.4",
+    "ethers": ">=6.13.0",
     "@tanstack/react-query": ">=5.0.0",
     "react": ">=18",
     "viem": ">=2.0.0",
     "wagmi": ">=2.0.0"
   },
-  "dependencies": {
-    "@0glabs/0g-serving-broker": "^0.3.1",
-    "ethers": "^6.13.4"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "@0glabs/0g-serving-broker": "^0.4.4",
+    "ethers": "^6.13.4",
     "@tanstack/react-query": "^5.62.14",
     "@types/react": "^19.1.2",
     "react": "^19.1.0",
     "tsup": "^8.3.6",
     "typescript": "^5.8.3",
-    "viem": "^2.22.5",
-    "wagmi": "^2.15.3"
+    "viem": "^2.37.8",
+    "wagmi": "^2.17.5"
   }
 }

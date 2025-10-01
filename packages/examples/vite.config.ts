@@ -1,17 +1,22 @@
-import { reactRouter } from "@react-router/dev/vite";
-import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
+import react from "@vitejs/plugin-react";
+import path from "path";
 
+// https://vite.dev/config/
 export default defineConfig({
-  plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
+  plugins: [react()],
   resolve: {
     alias: {
-      child_process: "/app/empty.js",
-      "fs/promises": "/app/empty.js",
-      fs: "/app/empty.js",
-      path: "/app/empty.js",
+      "@": path.resolve(__dirname, "./src"),
+      child_process: "/src/empty.js",
+      "fs/promises": "/src/empty.js",
+      fs: "/src/empty.js",
+      path: "/src/empty.js",
     },
+    // Make sure the app and the library share ONE instance
+    dedupe: ["react", "react-dom", "wagmi", "viem", "@tanstack/react-query"],
+    // Keep default: false, helps avoid duplicate module graphs via symlinks
+    preserveSymlinks: false,
   },
   define: {
     global: "globalThis",

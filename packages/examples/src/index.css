@@ -88,3 +88,61 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Markdown paragraph styles */
+.prose p {
+  margin-block-start: 1em;
+  margin-block-end: 1em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+}
+
+.prose p:first-child {
+  @apply mt-0;
+}
+
+.prose p:last-child {
+  @apply mb-0;
+}
+
+/* Markdown table styles */
+.prose table {
+  @apply w-full border-collapse border border-gray-300;
+}
+
+.prose thead {
+  @apply bg-gray-100;
+}
+
+.prose th {
+  @apply border border-gray-300 px-4 py-2 text-left font-semibold;
+}
+
+.prose td {
+  @apply border border-gray-300 px-4 py-2;
+}
+
+.prose tbody tr:nth-child(even) {
+  @apply bg-gray-50;
+}
+
+/* Invert colors for user messages */
+.prose-invert table {
+  @apply border-gray-500;
+}
+
+.prose-invert thead {
+  @apply bg-blue-700;
+}
+
+.prose-invert th {
+  @apply border-gray-500;
+}
+
+.prose-invert td {
+  @apply border-gray-500;
+}
+
+.prose-invert tbody tr:nth-child(even) {
+  @apply bg-blue-700;
+}

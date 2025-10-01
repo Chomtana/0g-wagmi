@@ -2,6 +2,11 @@ import { useState, useRef, useEffect } from "react";
 import { use0gChat } from "0g-wagmi";
 import { useAccount } from "wagmi";
 import { Link, useParams } from "react-router";
+import ReactMarkdown from "react-markdown";
+import remarkMath from "remark-math";
+import remarkGfm from "remark-gfm";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
 
 type DisplayMessage = {
   id: string;
@@ -222,18 +227,28 @@ export default function ChatPage() {
                             <summary className="px-3 py-2 text-sm font-medium text-gray-700 hover:cursor-pointer hover:bg-gray-100">
                               💭 Thinking process
                             </summary>
-                            <div className="px-3 py-2 text-sm text-gray-600 border-t border-gray-200 whitespace-pre-wrap">
-                              {message.isStreaming
-                                ? currentStreamingReason || "Thinking..."
-                                : message.reason}
+                            <div className="px-3 py-2 text-sm text-gray-600 border-t border-gray-200 prose prose-sm max-w-none">
+                              <ReactMarkdown
+                                remarkPlugins={[remarkMath, remarkGfm]}
+                                rehypePlugins={[rehypeKatex]}
+                              >
+                                {message.isStreaming
+                                  ? currentStreamingReason || "Thinking..."
+                                  : message.reason || ""}
+                              </ReactMarkdown>
                             </div>
                           </details>
                         )}
-                        <p className="whitespace-pre-wrap">
-                          {message.isStreaming
-                            ? currentStreamingMessage || "..."
-                            : message.content}
-                        </p>
+                        <div className={`prose ${message.role === "user" ? "prose-invert" : ""} max-w-none`}>
+                          <ReactMarkdown
+                            remarkPlugins={[remarkMath, remarkGfm]}
+                            rehypePlugins={[rehypeKatex]}
+                          >
+                            {message.isStreaming
+                              ? currentStreamingMessage || "..."
+                              : message.content}
+                          </ReactMarkdown>
+                        </div>
                         {message.isStreaming && currentStreamingMessage && (
                           <span className="inline-block w-2 h-4 bg-current animate-pulse ml-1" />
                         )}

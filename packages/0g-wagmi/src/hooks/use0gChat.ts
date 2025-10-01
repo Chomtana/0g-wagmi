@@ -121,7 +121,6 @@ export function use0gChat(providerAddress: string): Use0gChatReturn {
                   // The Responses stream includes events that carry text deltas.
                   // We defensively check a few common shapes.
                   const evt = JSON.parse(payload) as any;
-                  console.log("evt", evt);
                   const choice = evt.choices?.[0];
                   const contentToken = choice?.delta?.content ?? "";
                   const reasoningToken = choice?.delta?.reasoning_content ?? "";

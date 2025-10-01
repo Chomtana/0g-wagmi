@@ -30,33 +30,9 @@ const router = createBrowserRouter([
 // Layout component with Web3Provider
 function Layout() {
   return (
-    <html lang="en" className="light">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="color-scheme" content="light" />
-        <title>0g-wagmi Demo</title>
-        <meta
-          name="description"
-          content="AI Model Marketplace powered by 0G Network"
-        />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-        />
-      </head>
-      <body className="light">
-        <Web3Provider>
-          <Outlet />
-        </Web3Provider>
-      </body>
-    </html>
+    <Web3Provider>
+      <Outlet />
+    </Web3Provider>
   );
 }
 

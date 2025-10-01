@@ -268,10 +268,10 @@ export default defineConfig({
   ...,
   resolve: {
     alias: {
-      child_process: "/app/empty.js",
-      "fs/promises": "/app/empty.js",
-      fs: "/app/empty.js",
-      path: "/app/empty.js",
+      child_process: "/src/empty.js",
+      "fs/promises": "/src/empty.js",
+      fs: "/src/empty.js",
+      path: "/src/empty.js",
     },
   },
   define: {

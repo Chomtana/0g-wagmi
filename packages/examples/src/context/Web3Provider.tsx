@@ -19,7 +19,7 @@ const metadata = {
   icons: ["https://0g.ai/favicon.ico"],
 };
 
-const chains = [zeroGMainnet, temporaryTestnet];
+const chains = [temporaryTestnet, zeroGMainnet];
 
 const wagmiAdapter = new WagmiAdapter({
   projectId,

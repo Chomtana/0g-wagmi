@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { use0gChat, use0gServiceMetadata } from "0g-wagmi";
+import { use0gChat, use0gServiceMetadata, type ChatMessage } from "0g-wagmi";
 import { useAccount } from "wagmi";
 import { Link, useParams } from "react-router";
 import ReactMarkdown from "react-markdown";
@@ -50,7 +50,8 @@ export default function ChatPage() {
       content: inputValue.trim(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    const newMessages = [...messages, userMessage];
+    setMessages(newMessages);
     setInputValue("");
     setCurrentStreamingMessage("");
     setCurrentStreamingReason("");
@@ -72,7 +73,13 @@ export default function ChatPage() {
         },
       ]);
 
-      await chat(inputValue.trim(), (message: string, reason: string) => {
+      // Convert display messages to ChatMessage format
+      const chatHistory: ChatMessage[] = newMessages.map((msg) => ({
+        role: msg.role,
+        content: msg.content,
+      }));
+
+      await chat(chatHistory, (message: string, reason: string) => {
         console.log("fullMessage", message);
         console.log("reason", reason);
         fullMessage = message;

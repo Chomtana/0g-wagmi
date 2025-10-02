@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from "react";
-import { use0gChat } from "0g-wagmi";
+import { use0gChat, use0gServiceMetadata } from "0g-wagmi";
 import { useAccount } from "wagmi";
 import { Link, useParams } from "react-router";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
 import "katex/dist/katex.min.css";
 
 type DisplayMessage = {
@@ -20,6 +21,7 @@ export default function ChatPage() {
   const { isConnected } = useAccount();
   const { providerAddress } = useParams();
   const { chat, isLoading } = use0gChat(providerAddress || "0x");
+  const { modelName } = use0gServiceMetadata(providerAddress || "0x");
 
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
@@ -149,7 +151,9 @@ export default function ChatPage() {
                 />
               </svg>
             </Link>
-            <h1 className="text-xl font-semibold text-gray-900">0G Chat</h1>
+            <h1 className="text-xl font-semibold text-gray-900">
+              {modelName || "0G Chat"}
+            </h1>
           </div>
           <button
             onClick={handleClearChat}
@@ -230,7 +234,7 @@ export default function ChatPage() {
                             <div className="px-3 py-2 text-sm text-gray-600 border-t border-gray-200 prose prose-sm max-w-none">
                               <ReactMarkdown
                                 remarkPlugins={[remarkMath, remarkGfm]}
-                                rehypePlugins={[rehypeKatex]}
+                                rehypePlugins={[rehypeKatex, rehypeRaw]}
                               >
                                 {message.isStreaming
                                   ? currentStreamingReason || "Thinking..."
@@ -242,7 +246,7 @@ export default function ChatPage() {
                         <div className={`prose ${message.role === "user" ? "prose-invert" : ""} max-w-none`}>
                           <ReactMarkdown
                             remarkPlugins={[remarkMath, remarkGfm]}
-                            rehypePlugins={[rehypeKatex]}
+                            rehypePlugins={[rehypeKatex, rehypeRaw]}
                           >
                             {message.isStreaming
                               ? currentStreamingMessage || "..."

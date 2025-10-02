@@ -201,7 +201,7 @@ export default function ChatPage() {
                   }`}
                 >
                   <div
-                    className={`max-w-2xl px-4 py-3 rounded-lg ${
+                    className={`max-w-2xl min-w-0 px-4 py-3 rounded-lg overflow-hidden ${
                       message.role === "user"
                         ? "bg-blue-600 text-white"
                         : "bg-white border border-gray-200 text-gray-900"
@@ -225,7 +225,7 @@ export default function ChatPage() {
                           </svg>
                         </div>
                       )}
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0 overflow-hidden">
                         {message.role === "assistant" && (message.reason || (message.isStreaming && currentStreamingReason)) && (
                           <details className="mb-2 bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
                             <summary className="px-3 py-2 text-sm font-medium text-gray-700 hover:cursor-pointer hover:bg-gray-100">
@@ -243,7 +243,7 @@ export default function ChatPage() {
                             </div>
                           </details>
                         )}
-                        <div className={`prose ${message.role === "user" ? "prose-invert" : ""} max-w-none`}>
+                        <div className={`prose ${message.role === "user" ? "prose-invert" : ""} max-w-none overflow-x-auto`}>
                           <ReactMarkdown
                             remarkPlugins={[remarkMath, remarkGfm]}
                             rehypePlugins={[rehypeKatex, rehypeRaw]}

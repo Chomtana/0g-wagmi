@@ -27,7 +27,7 @@ export type ChatMessage = {
 
 export interface Use0gChatReturn {
   chat: (
-    question: string,
+    question: string | ChatMessage[],
     onMessage?: (message: string, reason: string) => any
   ) => Promise<string>;
   isLoading: boolean;

@@ -19,7 +19,11 @@ export {
 } from "./hooks/use0gInferenceAddFunds";
 export { use0gBroker } from "./hooks/use0gBroker";
 export { use0gServices } from "./hooks/use0gServices";
-export { use0gChat, type Use0gChatReturn } from "./hooks/use0gChat";
+export {
+  use0gChat,
+  type Use0gChatReturn,
+  type ChatMessage,
+} from "./hooks/use0gChat";
 export {
   use0gServiceMetadata,
   type ServiceMetadata,

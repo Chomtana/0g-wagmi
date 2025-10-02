@@ -24,6 +24,7 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
 import "katex/dist/katex.min.css";
 import { use0gChat } from '0g-wagmi'
 
@@ -56,7 +57,7 @@ function ChatComponent({ providerAddress }: { providerAddress: string }) {
       <div>
         <ReactMarkdown
           remarkPlugins={[remarkMath, remarkGfm]}
-          rehypePlugins={[rehypeKatex]}
+          rehypePlugins={[rehypeKatex, rehypeRaw]}
         >
           {response}
         </ReactMarkdown>
@@ -78,6 +79,7 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
 import "katex/dist/katex.min.css";
 import { use0gChat } from '0g-wagmi'
 
@@ -113,7 +115,7 @@ function ChatComponent({ providerAddress }: { providerAddress: string }) {
       <div>
         <ReactMarkdown
           remarkPlugins={[remarkMath, remarkGfm]}
-          rehypePlugins={[rehypeKatex]}
+          rehypePlugins={[rehypeKatex, rehypeRaw]}
         >
           {reason}
         </ReactMarkdown>
@@ -123,7 +125,7 @@ function ChatComponent({ providerAddress }: { providerAddress: string }) {
       <div>
         <ReactMarkdown
           remarkPlugins={[remarkMath, remarkGfm]}
-          rehypePlugins={[rehypeKatex]}
+          rehypePlugins={[rehypeKatex, rehypeRaw]}
         >
           {response}
         </ReactMarkdown>
@@ -146,6 +148,7 @@ import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
 import "katex/dist/katex.min.css";
 import { use0gChat, ChatMessage } from '0g-wagmi'
 
@@ -191,7 +194,7 @@ function ChatWithHistory({ providerAddress }: { providerAddress: string }) {
       <div>
         <ReactMarkdown
           remarkPlugins={[remarkMath, remarkGfm]}
-          rehypePlugins={[rehypeKatex]}
+          rehypePlugins={[rehypeKatex, rehypeRaw]}
         >
           {reason}
         </ReactMarkdown>
@@ -201,7 +204,7 @@ function ChatWithHistory({ providerAddress }: { providerAddress: string }) {
       <div>
         <ReactMarkdown
           remarkPlugins={[remarkMath, remarkGfm]}
-          rehypePlugins={[rehypeKatex]}
+          rehypePlugins={[rehypeKatex, rehypeRaw]}
         >
           {response}
         </ReactMarkdown>

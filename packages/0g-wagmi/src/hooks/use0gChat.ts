@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { createZGComputeNetworkBroker } from "@0glabs/0g-serving-broker";
 import { useEthersSigner } from "./useEthersSigner";
+import { clear0GCache } from "../cache-clearing/cacheClearing";
 
 export type ChatMessage = {
   role: string; // "system" | "developer" | "user" | "assistant" | "tool" | "function"
@@ -43,127 +44,139 @@ export function use0gChat(providerAddress: string): Use0gChatReturn {
       question: string | ChatMessage[],
       onMessage?: (message: string, reason: string) => any
     ): Promise<string> => {
-      if (!signer) {
-        throw new Error("No signer available. Please connect your wallet.");
-      }
-
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        // Initialize broker
-        const broker = await createZGComputeNetworkBroker(signer);
-
-        // Acknowledge provider
-        await broker.inference.acknowledgeProviderSigner(providerAddress);
-
-        // Get service metadata and headers
-        const { endpoint, model } = await broker.inference.getServiceMetadata(
-          providerAddress
-        );
-
-        // Prepare messages
-        const messages: ChatMessage[] =
-          typeof question === "string"
-            ? [{ role: "user", content: question }]
-            : question;
-
-        const headers = await broker.inference.getRequestHeaders(
-          providerAddress,
-          JSON.stringify(messages)
-        );
-
-        // Send request to the service
-        const response = await fetch(`${endpoint}/chat/completions`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ...headers,
-          },
-          body: JSON.stringify({
-            messages,
-            model: model,
-            stream: Boolean(onMessage),
-          }),
-        });
-
-        if (!response.ok || !response.body) {
-          const detail = await response.text().catch(() => "");
-          throw new Error(`0g error ${response.status}: ${detail}`);
+      for (let _ = 0; _ < 2; _++) {
+        if (!signer) {
+          throw new Error("No signer available. Please connect your wallet.");
         }
 
-        if (onMessage) {
-          const reader = response.body.getReader();
-          const decoder = new TextDecoder();
-          let buffer = "";
-          let full = "";
-          let reason = "";
+        setIsLoading(true);
+        setError(null);
 
-          while (true) {
-            const { value, done } = await reader.read();
-            if (done) break;
-            buffer += decoder.decode(value, { stream: true });
+        try {
+          // Initialize broker
+          const broker = await createZGComputeNetworkBroker(signer);
 
-            // Generic SSE parse
-            let j;
-            while ((j = buffer.indexOf("\n\n")) !== -1) {
-              const frame = buffer.slice(0, j);
-              buffer = buffer.slice(j + 2);
+          // Acknowledge provider
+          await broker.inference.acknowledgeProviderSigner(providerAddress);
 
-              for (const line of frame.split("\n")) {
-                if (!line.startsWith("data:")) continue;
-                const payload = line.slice(5).trim();
-                if (payload === "[DONE]") {
-                  onMessage(full, reason);
-                  return full;
-                }
-                try {
-                  // The Responses stream includes events that carry text deltas.
-                  // We defensively check a few common shapes.
-                  const evt = JSON.parse(payload) as any;
-                  const choice = evt.choices?.[0];
-                  const contentToken = choice?.delta?.content ?? "";
-                  const reasoningToken = choice?.delta?.reasoning_content ?? "";
+          // Get service metadata and headers
+          const { endpoint, model } = await broker.inference.getServiceMetadata(
+            providerAddress
+          );
 
-                  if (contentToken) {
-                    full += contentToken;
-                  }
-                  if (reasoningToken) {
-                    reason += reasoningToken;
-                  }
+          // Prepare messages
+          const messages: ChatMessage[] =
+            typeof question === "string"
+              ? [{ role: "user", content: question }]
+              : question;
 
-                  if (contentToken || reasoningToken) {
+          const headers = await broker.inference.getRequestHeaders(
+            providerAddress,
+            JSON.stringify(messages)
+          );
+
+          // Send request to the service
+          const response = await fetch(`${endpoint}/chat/completions`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              ...headers,
+            },
+            body: JSON.stringify({
+              messages,
+              model: model,
+              stream: Boolean(onMessage),
+            }),
+          });
+
+          if (!response.ok || !response.body) {
+            const detail = await response.text().catch(() => "");
+            throw new Error(`0g error ${response.status}: ${detail}`);
+          }
+
+          if (onMessage) {
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let buffer = "";
+            let full = "";
+            let reason = "";
+
+            while (true) {
+              const { value, done } = await reader.read();
+              if (done) break;
+              buffer += decoder.decode(value, { stream: true });
+
+              // Generic SSE parse
+              let j;
+              while ((j = buffer.indexOf("\n\n")) !== -1) {
+                const frame = buffer.slice(0, j);
+                buffer = buffer.slice(j + 2);
+
+                for (const line of frame.split("\n")) {
+                  if (!line.startsWith("data:")) continue;
+                  const payload = line.slice(5).trim();
+                  if (payload === "[DONE]") {
                     onMessage(full, reason);
+                    return full;
                   }
-                } catch {
-                  // ignore
+                  try {
+                    // The Responses stream includes events that carry text deltas.
+                    // We defensively check a few common shapes.
+                    const evt = JSON.parse(payload) as any;
+                    const choice = evt.choices?.[0];
+                    const contentToken = choice?.delta?.content ?? "";
+                    const reasoningToken =
+                      choice?.delta?.reasoning_content ?? "";
+
+                    if (contentToken) {
+                      full += contentToken;
+                    }
+                    if (reasoningToken) {
+                      reason += reasoningToken;
+                    }
+
+                    if (contentToken || reasoningToken) {
+                      onMessage(full, reason);
+                    }
+                  } catch {
+                    // ignore
+                  }
                 }
               }
             }
+
+            return full;
+          } else {
+            const data = await response.json();
+
+            if (!response.ok) {
+              // Check if the response contains an error message
+              const errorMessage =
+                data?.error || `HTTP error! status: ${response.status}`;
+              throw new Error(errorMessage);
+            }
+            const content = data.choices?.[0]?.message?.content || "";
+
+            return content;
+          }
+        } catch (err) {
+          if (_ === 0) {
+            console.error("Clearing 0G cache and try again");
+            clear0GCache(signer.address, providerAddress);
+            continue;
           }
 
-          return full;
-        } else {
-          const data = await response.json();
-
-          if (!response.ok) {
-            // Check if the response contains an error message
-            const errorMessage =
-              data?.error || `HTTP error! status: ${response.status}`;
-            throw new Error(errorMessage);
-          }
-          const content = data.choices?.[0]?.message?.content || "";
-
-          return content;
+          const errorMessage =
+            err instanceof Error ? err.message : "An error occurred";
+          setError(errorMessage);
+          throw err;
+        } finally {
+          setIsLoading(false);
         }
-      } catch (err) {
-        const errorMessage =
-          err instanceof Error ? err.message : "An error occurred";
-        setError(errorMessage);
-        throw err;
-      } finally {
-        setIsLoading(false);
       }
+
+      setError("Failed to get response from the model");
+      throw new Error("Failed to get response from the model");
     },
     [signer, providerAddress]
   );

@@ -5,16 +5,213 @@ A monorepo containing wagmi hooks for interacting with the 0G Compute Network.
 ## Packages
 
 - **`0g-wagmi`** - Core SDK with React hooks for 0G Network integration
-- **`examples`** - Example React Router application demonstrating the SDK usage
+- **`examples`** - Example React application demonstrating the 0g-wagmi SDK usage
 
 ## 0g-wagmi SDK Usage
 
 ### Installation
 ```bash
-npm install 0g-wagmi wagmi viem @tanstack/react-query ethers
+npm install 0g-wagmi wagmi viem @tanstack/react-query ethers @0glabs/0g-serving-broker
 ```
 
 ### Available Hooks
+
+#### `use0gChat` (Non-streaming)
+Interact with AI models on the 0G network:
+
+```tsx
+import ReactMarkdown from "react-markdown";
+import remarkMath from "remark-math";
+import remarkGfm from "remark-gfm";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
+import { use0gChat } from '0g-wagmi'
+
+function ChatComponent({ providerAddress }: { providerAddress: string }) {
+  const { chat, isLoading, error } = use0gChat(providerAddress)
+  const [question, setQuestion] = useState('')
+  const [response, setResponse] = useState('')
+
+  const handleSubmit = async () => {
+    try {
+      const answer = await chat(question)
+      setResponse(answer)
+    } catch (err) {
+      console.error('Chat error:', err)
+    }
+  }
+
+  return (
+    <div>
+      <input 
+        value={question}
+        onChange={(e) => setQuestion(e.target.value)}
+        placeholder="Ask a question..."
+      />
+      <button onClick={handleSubmit} disabled={isLoading}>
+        {isLoading ? 'Processing...' : 'Send'}
+      </button>
+
+      <div>Response:</div>
+      <div>
+        <ReactMarkdown
+          remarkPlugins={[remarkMath, remarkGfm]}
+          rehypePlugins={[rehypeKatex]}
+        >
+          {response}
+        </ReactMarkdown>
+      </div>
+
+      {error && <div>Error: {error}</div>}
+    </div>
+  )
+}
+```
+
+In non-streaming mode, the user only receives the final response once the AI has completed all of its processing. The answer is delivered in full at the end, without showing the AI’s intermediate reasoning or thought process.
+
+#### `use0gChat` (Streaming)
+Interact with AI models on the 0G network with a streaming response by passing a callback function `(response, reason) => { ... }` in addition to the chat messages:
+
+```tsx
+import ReactMarkdown from "react-markdown";
+import remarkMath from "remark-math";
+import remarkGfm from "remark-gfm";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
+import { use0gChat } from '0g-wagmi'
+
+function ChatComponent({ providerAddress }: { providerAddress: string }) {
+  const { chat, isLoading, error } = use0gChat(providerAddress)
+  const [question, setQuestion] = useState('')
+  const [response, setResponse] = useState('')
+  const [reason, setReason] = useState('')
+
+  const handleSubmit = async () => {
+    try {
+      const answer = await chat(question, (answer: string, reason: string) => {
+        setResponse(answer)
+        setReason(reason)
+      })
+    } catch (err) {
+      console.error('Chat error:', err)
+    }
+  }
+
+  return (
+    <div>
+      <input 
+        value={question}
+        onChange={(e) => setQuestion(e.target.value)}
+        placeholder="Ask a question..."
+      />
+      <button onClick={handleSubmit} disabled={isLoading}>
+        {isLoading ? 'Processing...' : 'Send'}
+      </button>
+
+      <div>Thinking Reason:</div>
+      <div>
+        <ReactMarkdown
+          remarkPlugins={[remarkMath, remarkGfm]}
+          rehypePlugins={[rehypeKatex]}
+        >
+          {reason}
+        </ReactMarkdown>
+      </div>
+
+      <div>Response:</div>
+      <div>
+        <ReactMarkdown
+          remarkPlugins={[remarkMath, remarkGfm]}
+          rehypePlugins={[rehypeKatex]}
+        >
+          {response}
+        </ReactMarkdown>
+      </div>
+
+      {error && <div>Error: {error}</div>}
+    </div>
+  )
+}
+```
+
+In streaming mode, the AI begins sending partial responses as soon as processing starts. Instead of waiting for the full computation to finish, the user can see **both the answer and thinking reason** unfold in real time.
+
+#### Passing a series of chat messages
+
+The `chat` function also supports multi-turn conversations. Simply pass in your conversation as an array of `ChatMessage` objects (`ChatMessage[]`):
+
+```tsx
+import ReactMarkdown from "react-markdown";
+import remarkMath from "remark-math";
+import remarkGfm from "remark-gfm";
+import rehypeKatex from "rehype-katex";
+import "katex/dist/katex.min.css";
+import { use0gChat, ChatMessage } from '0g-wagmi'
+
+function ChatWithHistory({ providerAddress }: { providerAddress: string }) {
+  const { chat, isLoading, error } = use0gChat(providerAddress)
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    { role: "system", content: "You are a helpful assistant." },
+    { role: "user", content: "Hello, who won the World Cup in 2018?" },
+    { role: "assistant", content: "France won the 2018 FIFA World Cup." }
+  ])
+  const [question, setQuestion] = useState("")
+  const [response, setResponse] = useState("")
+  const [reason, setReason] = useState("")
+
+  const handleSubmit = async () => {
+    try {
+      // Add the new user message to the conversation
+      const updatedMessages = [...messages, { role: "user", content: question }]
+      setMessages(updatedMessages)
+
+      // Pass the full history to the chat function
+      await chat(updatedMessages, (answer: string, reason: string) => {
+        setResponse(answer)
+        setReason(reason)
+      })
+    } catch (err) {
+      console.error("Chat error:", err)
+    }
+  }
+
+  return (
+    <div>
+      <input 
+        value={question}
+        onChange={(e) => setQuestion(e.target.value)}
+        placeholder="Ask a question..."
+      />
+      <button onClick={handleSubmit} disabled={isLoading}>
+        {isLoading ? "Processing..." : "Send"}
+      </button>
+
+      <div>Thinking Reason:</div>
+      <div>
+        <ReactMarkdown
+          remarkPlugins={[remarkMath, remarkGfm]}
+          rehypePlugins={[rehypeKatex]}
+        >
+          {reason}
+        </ReactMarkdown>
+      </div>
+
+      <div>Response:</div>
+      <div>
+        <ReactMarkdown
+          remarkPlugins={[remarkMath, remarkGfm]}
+          rehypePlugins={[rehypeKatex]}
+        >
+          {response}
+        </ReactMarkdown>
+      </div>
+
+      {error && <div>Error: {error}</div>}
+    </div>
+  )
+}
+```
 
 #### `use0gBalance`
 Query balance from the 0G broker:
@@ -116,43 +313,6 @@ function ServicesComponent() {
           <p>Output Price: {service.outputPrice.toString()} per 1M tokens</p>
         </div>
       ))}
-    </div>
-  )
-}
-```
-
-#### `use0gChat`
-Interact with AI models on the 0G network:
-
-```tsx
-import { use0gChat } from '0g-wagmi'
-
-function ChatComponent({ providerAddress }: { providerAddress: string }) {
-  const { chat, isLoading, error } = use0gChat(providerAddress)
-  const [question, setQuestion] = useState('')
-  const [response, setResponse] = useState('')
-
-  const handleSubmit = async () => {
-    try {
-      const answer = await chat(question)
-      setResponse(answer)
-    } catch (err) {
-      console.error('Chat error:', err)
-    }
-  }
-
-  return (
-    <div>
-      <input 
-        value={question}
-        onChange={(e) => setQuestion(e.target.value)}
-        placeholder="Ask a question..."
-      />
-      <button onClick={handleSubmit} disabled={isLoading}>
-        {isLoading ? 'Processing...' : 'Send'}
-      </button>
-      {response && <div>Response: {response}</div>}
-      {error && <div>Error: {error}</div>}
     </div>
   )
 }

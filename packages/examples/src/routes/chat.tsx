@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from "react";
-import { use0gChat } from "0g-wagmi";
+import { use0gChat, use0gServiceMetadata } from "0g-wagmi";
 import { useAccount } from "wagmi";
 import { Link, useParams } from "react-router";
 import ReactMarkdown from "react-markdown";
 import remarkMath from "remark-math";
 import remarkGfm from "remark-gfm";
 import rehypeKatex from "rehype-katex";
+import rehypeRaw from "rehype-raw";
 import "katex/dist/katex.min.css";
 
 type DisplayMessage = {
@@ -20,6 +21,7 @@ export default function ChatPage() {
   const { isConnected } = useAccount();
   const { providerAddress } = useParams();
   const { chat, isLoading } = use0gChat(providerAddress || "0x");
+  const { modelName } = use0gServiceMetadata(providerAddress || "0x");
 
   const [messages, setMessages] = useState<DisplayMessage[]>([]);
   const [inputValue, setInputValue] = useState("");
@@ -149,7 +151,9 @@ export default function ChatPage() {
                 />
               </svg>
             </Link>
-            <h1 className="text-xl font-semibold text-gray-900">0G Chat</h1>
+            <h1 className="text-xl font-semibold text-gray-900">
+              {modelName || "0G Chat"}
+            </h1>
           </div>
           <button
             onClick={handleClearChat}
@@ -197,7 +201,7 @@ export default function ChatPage() {
                   }`}
                 >
                   <div
-                    className={`max-w-2xl px-4 py-3 rounded-lg ${
+                    className={`max-w-2xl min-w-0 px-4 py-3 rounded-lg overflow-hidden ${
                       message.role === "user"
                         ? "bg-blue-600 text-white"
                         : "bg-white border border-gray-200 text-gray-900"
@@ -221,7 +225,7 @@ export default function ChatPage() {
                           </svg>
                         </div>
                       )}
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0 overflow-hidden">
                         {message.role === "assistant" && (message.reason || (message.isStreaming && currentStreamingReason)) && (
                           <details className="mb-2 bg-gray-50 border border-gray-200 rounded-lg overflow-hidden">
                             <summary className="px-3 py-2 text-sm font-medium text-gray-700 hover:cursor-pointer hover:bg-gray-100">
@@ -230,7 +234,7 @@ export default function ChatPage() {
                             <div className="px-3 py-2 text-sm text-gray-600 border-t border-gray-200 prose prose-sm max-w-none">
                               <ReactMarkdown
                                 remarkPlugins={[remarkMath, remarkGfm]}
-                                rehypePlugins={[rehypeKatex]}
+                                rehypePlugins={[rehypeKatex, rehypeRaw]}
                               >
                                 {message.isStreaming
                                   ? currentStreamingReason || "Thinking..."
@@ -239,10 +243,10 @@ export default function ChatPage() {
                             </div>
                           </details>
                         )}
-                        <div className={`prose ${message.role === "user" ? "prose-invert" : ""} max-w-none`}>
+                        <div className={`prose ${message.role === "user" ? "prose-invert" : ""} max-w-none overflow-x-auto`}>
                           <ReactMarkdown
                             remarkPlugins={[remarkMath, remarkGfm]}
-                            rehypePlugins={[rehypeKatex]}
+                            rehypePlugins={[rehypeKatex, rehypeRaw]}
                           >
                             {message.isStreaming
                               ? currentStreamingMessage || "..."

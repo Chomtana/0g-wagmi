@@ -89,25 +89,120 @@
   }
 }
 
-/* Markdown paragraph styles */
+/* Markdown styles - disable clearfix that removes margins */
+.prose * {
+  margin: revert !important;
+}
+
 .prose p {
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  margin-inline-start: 0px;
-  margin-inline-end: 0px;
+  margin-block-start: 1em !important;
+  margin-block-end: 1em !important;
+  margin-inline-start: 0px !important;
+  margin-inline-end: 0px !important;
 }
 
 .prose p:first-child {
-  @apply mt-0;
+  margin-top: 0 !important;
 }
 
 .prose p:last-child {
-  @apply mb-0;
+  margin-bottom: 0 !important;
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6 {
+  margin-top: 1.5em !important;
+  margin-bottom: 0.5em !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+}
+
+.prose h1 {
+  font-size: 2em !important;
+}
+
+.prose h2 {
+  font-size: 1.5em !important;
+}
+
+.prose h3 {
+  font-size: 1.25em !important;
+}
+
+.prose h4 {
+  font-size: 1.1em !important;
+}
+
+.prose h5 {
+  font-size: 1em !important;
+}
+
+.prose h6 {
+  font-size: 0.9em !important;
+}
+
+.prose h1:first-child, .prose h2:first-child, .prose h3:first-child,
+.prose h4:first-child, .prose h5:first-child, .prose h6:first-child {
+  margin-top: 0 !important;
+}
+
+.prose ul, .prose ol {
+  margin-top: 1em !important;
+  margin-bottom: 1em !important;
+  padding-left: 2em !important;
+}
+
+.prose li {
+  margin-top: 0.25em !important;
+  margin-bottom: 0.25em !important;
+}
+
+.prose code {
+  padding: 0.2em 0.4em !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  border-radius: 3px !important;
+  font-size: 0.875em !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
+.prose pre {
+  margin-top: 1em !important;
+  margin-bottom: 1em !important;
+  padding: 1em !important;
+  background-color: rgba(0, 0, 0, 0.05) !important;
+  border-radius: 6px !important;
+  overflow-x: auto !important;
+  font-size: 0.8em !important;
+  line-height: 1.5 !important;
+  max-width: 100% !important;
+}
+
+.prose pre code {
+  background-color: transparent !important;
+  padding: 0 !important;
+  font-size: 1em !important;
+  white-space: pre !important;
+}
+
+.prose-invert code {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.prose-invert pre {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.prose blockquote {
+  margin-top: 1em !important;
+  margin-bottom: 1em !important;
+  padding-left: 1em !important;
+  border-left: 3px solid #d1d5db !important;
 }
 
 /* Markdown table styles */
 .prose table {
   @apply w-full border-collapse border border-gray-300;
+  margin-top: 1em !important;
+  margin-bottom: 1em !important;
 }
 
 .prose thead {

@@ -20,6 +20,10 @@ export {
 export { use0gBroker } from "./hooks/use0gBroker";
 export { use0gServices } from "./hooks/use0gServices";
 export { use0gChat, type Use0gChatReturn } from "./hooks/use0gChat";
+export {
+  use0gServiceMetadata,
+  type ServiceMetadata,
+} from "./hooks/use0gServiceMetadata";
 export { useEthersSigner } from "./hooks/useEthersSigner";
 export {
   walletClientToSigner,

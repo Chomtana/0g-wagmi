@@ -12,7 +12,10 @@
       "require": "./dist/index.js"
     }
   },
-  "repository": "https://github.com/Chomtana/0g-wagmi",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Chomtana/0g-wagmi.git"
+  },
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",

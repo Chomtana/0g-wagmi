@@ -1,6 +1,4 @@
-const unsupported = (name) => (..._args) => {
-  throw new Error(`child_process.${name} is not supported in this environment`);
-};
+const unsupported = (_name) => (..._args) => {};
 
 // Functions
 export const spawn = unsupported("spawn");

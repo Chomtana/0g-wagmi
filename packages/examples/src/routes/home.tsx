@@ -12,7 +12,6 @@ type Tab = "inference" | "storage" | "key-value";
 
 export default function HomePage() {
   const [activeTab, setActiveTab] = useState<Tab>("inference");
-  const [storageTab, setStorageTab] = useState<"upload" | "download">("upload");
 
   return (
     <div className="min-h-screen bg-background">
@@ -88,80 +87,52 @@ export default function HomePage() {
 
         {activeTab === "storage" && (
           <div className="space-y-6">
-            {/* Storage Sub-tabs */}
-            <div className="flex space-x-2 border-b">
-              <button
-                onClick={() => setStorageTab("upload")}
-                className={`px-4 py-2 font-medium transition-colors hover:cursor-pointer ${
-                  storageTab === "upload"
-                    ? "text-primary border-b-2 border-primary"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Upload
-              </button>
-              <button
-                onClick={() => setStorageTab("download")}
-                className={`px-4 py-2 font-medium transition-colors hover:cursor-pointer ${
-                  storageTab === "download"
-                    ? "text-primary border-b-2 border-primary"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                Download
-              </button>
-            </div>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Upload className="h-5 w-5" />
+                  <span>File Upload</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="file-upload">Select File</Label>
+                  <Input id="file-upload" type="file" className="mt-2" />
+                </div>
+                <Button
+                  onClick={() => window.alert("Coming Soon")}
+                  className="hover:cursor-pointer"
+                >
+                  Upload
+                </Button>
+              </CardContent>
+            </Card>
 
-            {storageTab === "upload" && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Upload className="h-5 w-5" />
-                    <span>File Upload</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label htmlFor="file-upload">Select File</Label>
-                    <Input id="file-upload" type="file" className="mt-2" />
-                  </div>
-                  <Button
-                    onClick={() => window.alert("Coming Soon")}
-                    className="hover:cursor-pointer"
-                  >
-                    Upload
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
-
-            {storageTab === "download" && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Database className="h-5 w-5" />
-                    <span>File Download</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <Label htmlFor="merkle-root">Merkle Root Hash</Label>
-                    <Input
-                      id="merkle-root"
-                      type="text"
-                      placeholder="Enter merkle root hash..."
-                      className="mt-2"
-                    />
-                  </div>
-                  <Button
-                    onClick={() => window.alert("Coming Soon")}
-                    className="hover:cursor-pointer"
-                  >
-                    Download
-                  </Button>
-                </CardContent>
-              </Card>
-            )}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Database className="h-5 w-5" />
+                  <span>File Download</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="merkle-root">Merkle Root Hash</Label>
+                  <Input
+                    id="merkle-root"
+                    type="text"
+                    placeholder="Enter merkle root hash..."
+                    className="mt-2"
+                  />
+                </div>
+                <Button
+                  onClick={() => window.alert("Coming Soon")}
+                  className="hover:cursor-pointer"
+                >
+                  Download
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         )}
 

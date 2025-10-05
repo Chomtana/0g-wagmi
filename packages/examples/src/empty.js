@@ -1,4 +1,6 @@
-const unsupported = (_name) => (..._args) => {};
+const unsupported = (_name) => (..._args) => new Proxy({}, {
+  get: () => unsupported(_name)
+});
 
 // Functions
 export const spawn = unsupported("spawn");

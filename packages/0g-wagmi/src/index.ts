@@ -30,6 +30,20 @@ export {
 } from "./hooks/use0gServiceMetadata";
 export { useEthersSigner } from "./hooks/useEthersSigner";
 export {
+  use0gStorageFile,
+  type Use0gStorageFileResult,
+} from "./hooks/use0gStorageFile";
+export {
+  use0gStorageUpload,
+  type Use0gStorageUploadParams,
+  type UploadResult,
+} from "./hooks/use0gStorageUpload";
+export {
+  use0gKeyValue,
+  type Use0gKeyValueParams,
+  type KeyValueData,
+} from "./hooks/use0gKeyValue";
+export {
   walletClientToSigner,
   publicClientToProvider,
 } from "./adapters/ethers";

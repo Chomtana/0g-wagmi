@@ -10,8 +10,11 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
       child_process: "/src/empty.js",
       "fs/promises": "/src/empty.js",
+      "node:fs/promises": "/src/empty.js",
       fs: "/src/empty.js",
       path: "/src/empty.js",
+      crypto: "/src/empty.js",
+      "node:crypto": "/src/empty.js",
     },
     // Make sure the app and the library share ONE instance
     dedupe: ["react", "react-dom", "wagmi", "viem", "@tanstack/react-query"],
@@ -23,6 +26,14 @@ export default defineConfig({
   },
   optimizeDeps: {
     include: ["buffer"],
-    exclude: ["child_process", "fs/promises", "fs", "path"],
+    exclude: [
+      "child_process",
+      "fs/promises",
+      "node:fs/promises",
+      "fs",
+      "path",
+      "crypto",
+      "node:crypto",
+    ],
   },
 });

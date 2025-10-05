@@ -1,6 +1,6 @@
-const unsupported = (name) => (..._args) => {
-  throw new Error(`child_process.${name} is not supported in this environment`);
-};
+const unsupported = (_name) => (..._args) => new Proxy({}, {
+  get: () => unsupported(_name)
+});
 
 // Functions
 export const spawn = unsupported("spawn");
@@ -10,6 +10,8 @@ export const fork = unsupported("fork");
 export const execSync = unsupported("execSync");
 export const spawnSync = unsupported("spawnSync");
 export const execFileSync = unsupported("execFileSync");
+export const createHash = unsupported("execFileSync");
+export const open = unsupported("open");
 
 // Classes / symbols that libraries sometimes reference
 export class ChildProcess {}
@@ -26,4 +28,6 @@ export default {
   execFileSync,
   ChildProcess,
   forkOpts,
+  createHash,
+  open,
 };

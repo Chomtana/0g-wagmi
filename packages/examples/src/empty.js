@@ -10,6 +10,8 @@ export const fork = unsupported("fork");
 export const execSync = unsupported("execSync");
 export const spawnSync = unsupported("spawnSync");
 export const execFileSync = unsupported("execFileSync");
+export const createHash = unsupported("execFileSync");
+export const open = unsupported("open");
 
 // Classes / symbols that libraries sometimes reference
 export class ChildProcess {}
@@ -26,4 +28,6 @@ export default {
   execFileSync,
   ChildProcess,
   forkOpts,
+  createHash,
+  open,
 };

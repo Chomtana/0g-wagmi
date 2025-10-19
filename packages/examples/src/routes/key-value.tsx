@@ -30,7 +30,8 @@ export default function KeyValuePage() {
     resetSetMutation,
     cachedValues,
   } = use0gKeyValue({
-    streamId: "0x000000000000000000000000000000000000000000000000000000000000f2bd",
+    streamId:
+      "0x000000000000000000000000000000000000000000000000000000000000f2bd",
     chainId,
     onSetSuccess: (result: { txHash: string; rootHash: string }) => {
       console.log("Set value successful:", result);
@@ -148,7 +149,9 @@ export default function KeyValuePage() {
               <Button
                 onClick={handleSetValue}
                 className="hover:cursor-pointer"
-                disabled={!setKey || !setValue || isSettingValue || !isConnected}
+                disabled={
+                  !setKey || !setValue || isSettingValue || !isConnected
+                }
               >
                 {isSettingValue ? (
                   <>
@@ -170,7 +173,9 @@ export default function KeyValuePage() {
                 <div className="p-4 bg-green-950 border border-green-800 rounded-lg space-y-2">
                   <div className="flex items-center space-x-2 text-green-400">
                     <CheckCircle className="h-5 w-5" />
-                    <span className="font-semibold">Value Set Successfully!</span>
+                    <span className="font-semibold">
+                      Value Set Successfully!
+                    </span>
                   </div>
                   <div className="space-y-1 text-sm text-green-300">
                     <div>
@@ -201,9 +206,7 @@ export default function KeyValuePage() {
                     <AlertCircle className="h-5 w-5" />
                     <span className="font-semibold">Set Value Failed</span>
                   </div>
-                  <p className="text-sm text-red-300">
-                    {setError.message}
-                  </p>
+                  <p className="text-sm text-red-300">{setError.message}</p>
                 </div>
               )}
             </CardContent>
@@ -276,44 +279,11 @@ export default function KeyValuePage() {
                     <AlertCircle className="h-5 w-5" />
                     <span className="font-semibold">Get Value Failed</span>
                   </div>
-                  <p className="text-sm text-red-300">
-                    {getError.message}
-                  </p>
+                  <p className="text-sm text-red-300">{getError.message}</p>
                 </div>
               )}
             </CardContent>
           </Card>
-
-          {/* Cached Values Display */}
-          {Object.keys(cachedValues).length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Database className="h-5 w-5" />
-                  <span>Cached Values</span>
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {Object.entries(cachedValues).map(([key, value]) => (
-                    <div
-                      key={key}
-                      className="p-3 bg-muted rounded-lg flex items-center justify-between"
-                    >
-                      <div className="flex-1">
-                        <code className="text-sm font-medium text-foreground">{key}</code>
-                      </div>
-                      <div className="flex-1 text-right">
-                        <code className="text-sm text-muted-foreground">
-                          {value || "(null)"}
-                        </code>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
         </div>
       </main>
     </div>

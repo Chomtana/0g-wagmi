@@ -111,21 +111,21 @@ export default function StoragePage() {
               )}
 
               {isSuccess && data && (
-                <div className="p-4 bg-green-50 dark:bg-green-950 border border-green-200 dark:border-green-800 rounded-lg space-y-2">
-                  <div className="flex items-center space-x-2 text-green-700 dark:text-green-400">
+                <div className="p-4 bg-green-950 border border-green-800 rounded-lg space-y-2">
+                  <div className="flex items-center space-x-2 text-green-400">
                     <CheckCircle className="h-5 w-5" />
                     <span className="font-semibold">Upload Successful!</span>
                   </div>
-                  <div className="space-y-1 text-sm">
+                  <div className="space-y-1 text-sm text-green-300">
                     <div>
                       <span className="font-medium">Root Hash:</span>
-                      <code className="ml-2 px-2 py-1 bg-green-100 dark:bg-green-900 rounded text-xs break-all">
+                      <code className="ml-2 px-2 py-1 bg-green-900 rounded text-xs break-all text-green-200">
                         {data.rootHash}
                       </code>
                     </div>
                     <div>
                       <span className="font-medium">Transaction Hash:</span>
-                      <code className="ml-2 px-2 py-1 bg-green-100 dark:bg-green-900 rounded text-xs break-all">
+                      <code className="ml-2 px-2 py-1 bg-green-900 rounded text-xs break-all text-green-200">
                         {data.txHash}
                       </code>
                     </div>
@@ -134,12 +134,12 @@ export default function StoragePage() {
               )}
 
               {isError && error && (
-                <div className="p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg space-y-2">
-                  <div className="flex items-center space-x-2 text-red-700 dark:text-red-400">
+                <div className="p-4 bg-red-950 border border-red-800 rounded-lg space-y-2">
+                  <div className="flex items-center space-x-2 text-red-400">
                     <AlertCircle className="h-5 w-5" />
                     <span className="font-semibold">Upload Failed</span>
                   </div>
-                  <p className="text-sm text-red-600 dark:text-red-400">
+                  <p className="text-sm text-red-300">
                     {error.message}
                   </p>
                 </div>

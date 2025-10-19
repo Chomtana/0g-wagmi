@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { Upload, Database, CheckCircle, AlertCircle } from "lucide-react";
+import { Upload, Database, CheckCircle, AlertCircle, Download } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { use0gStorageUpload } from "0g-wagmi";
+import { use0gStorageUpload, use0gStorageDownload } from "0g-wagmi";
 import { useAccount } from "wagmi";
 
 export default function StoragePage() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [rootHash, setRootHash] = useState("");
   const { isConnected } = useAccount();
 
   // Initialize the 0G storage upload hook
@@ -27,6 +28,24 @@ export default function StoragePage() {
     },
     onError: (err) => {
       console.error("Upload failed:", err);
+    },
+  });
+
+  // Initialize the 0G storage download hook
+  const {
+    downloadAndSave,
+    isLoading: isDownloading,
+    isSuccess: isDownloadSuccess,
+    isError: isDownloadError,
+    error: downloadError,
+    data: downloadData,
+    reset: resetDownload,
+  } = use0gStorageDownload({
+    onSuccess: (downloadData) => {
+      console.log("Download successful:", downloadData);
+    },
+    onError: (err) => {
+      console.error("Download failed:", err);
     },
   });
 
@@ -56,6 +75,21 @@ export default function StoragePage() {
     } catch (err) {
       // Error is already handled by onError callback
       console.error("Upload error:", err);
+    }
+  };
+
+  // Handle file download
+  const handleDownload = async () => {
+    if (!rootHash.trim()) {
+      window.alert("Please enter a root hash");
+      return;
+    }
+
+    try {
+      resetDownload();
+      await downloadAndSave(rootHash);
+    } catch (err) {
+      console.error("Download error:", err);
     }
   };
 
@@ -150,26 +184,73 @@ export default function StoragePage() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
-                <Database className="h-5 w-5" />
+                <Download className="h-5 w-5" />
                 <span>File Download</span>
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <Label htmlFor="merkle-root">Merkle Root Hash</Label>
+                <Label htmlFor="merkle-root">Root Hash</Label>
                 <Input
                   id="merkle-root"
                   type="text"
-                  placeholder="Enter merkle root hash..."
+                  placeholder="Enter root hash (e.g., 0x1234...)"
                   className="mt-2"
+                  value={rootHash}
+                  onChange={(e) => setRootHash(e.target.value)}
+                  disabled={isDownloading}
                 />
               </div>
+
               <Button
-                onClick={() => window.alert("Coming Soon")}
+                onClick={handleDownload}
                 className="hover:cursor-pointer"
+                disabled={!rootHash || isDownloading}
               >
-                Download
+                {isDownloading ? (
+                  <>
+                    <span className="animate-spin mr-2">⏳</span>
+                    Downloading...
+                  </>
+                ) : (
+                  "Download from 0G Network"
+                )}
               </Button>
+
+              {isDownloadSuccess && downloadData && (
+                <div className="p-4 bg-green-950 border border-green-800 rounded-lg space-y-2">
+                  <div className="flex items-center space-x-2 text-green-400">
+                    <CheckCircle className="h-5 w-5" />
+                    <span className="font-semibold">Download Successful!</span>
+                  </div>
+                  <div className="space-y-1 text-sm text-green-300">
+                    <div>
+                      <span className="font-medium">File Name:</span>
+                      <code className="ml-2 px-2 py-1 bg-green-900 rounded text-xs text-green-200">
+                        {downloadData.fileName}
+                      </code>
+                    </div>
+                    <div>
+                      <span className="font-medium">File Size:</span>
+                      <code className="ml-2 px-2 py-1 bg-green-900 rounded text-xs text-green-200">
+                        {(downloadData.fileData.byteLength / 1024).toFixed(2)} KB
+                      </code>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {isDownloadError && downloadError && (
+                <div className="p-4 bg-red-950 border border-red-800 rounded-lg space-y-2">
+                  <div className="flex items-center space-x-2 text-red-400">
+                    <AlertCircle className="h-5 w-5" />
+                    <span className="font-semibold">Download Failed</span>
+                  </div>
+                  <p className="text-sm text-red-300">
+                    {downloadError.message}
+                  </p>
+                </div>
+              )}
             </CardContent>
           </Card>
         </div>

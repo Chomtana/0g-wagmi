@@ -94,7 +94,8 @@ export function use0gKeyValue({
           throw new Error(`Error selecting nodes: ${err}`);
         }
 
-        // Create flow contract instance
+        // Create flow contract instance with the signer
+        // The signer from wagmi already has a provider connected
         const flowContract = FixedPriceFlow__factory.connect(
           flowContractAddress,
           signer as any
@@ -102,6 +103,8 @@ export function use0gKeyValue({
 
         // Create batcher
         const batcher = new Batcher(1, nodes, flowContract, rpcUrl);
+
+        console.log("streamId", streamId);
 
         // Prepare key-value data
         const keyBytes = Uint8Array.from(Buffer.from(key, "utf-8"));

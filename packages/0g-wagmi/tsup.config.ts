@@ -14,6 +14,7 @@ export default defineConfig({
     "@tanstack/react-query",
     "ethers",
     "@0glabs/0g-serving-broker",
+    "@0glabs/0g-ts-sdk",
   ],
   target: "es2020",
   platform: "browser",

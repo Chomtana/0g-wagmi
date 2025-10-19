@@ -63,7 +63,9 @@ export function ModelsSection() {
   const [models, setModels] = useState<Model[]>([]);
   const [selectedModel, setSelectedModel] = useState<Model | null>(null);
   const [addCreditModel, setAddCreditModel] = useState<Model | null>(null);
-  const { services, isLoading } = use0gServices();
+  const { services, isLoading, error } = use0gServices();
+
+  console.log(services, error, "services");
 
   useEffect(() => {
     setModels(

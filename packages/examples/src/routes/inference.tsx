@@ -2,7 +2,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { CreditSection } from "@/components/CreditSection";
 import { ModelsSection } from "@/components/ModelsSection";
 
-export default function HomePage() {
+export default function InferencePage() {
   return (
     <div className="min-h-screen bg-background">
       <PageHeader />

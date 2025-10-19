@@ -39,6 +39,11 @@ export {
   type UploadResult,
 } from "./hooks/use0gStorageUpload";
 export {
+  use0gStorageDownload,
+  type Use0gStorageDownloadParams,
+  type DownloadResult,
+} from "./hooks/use0gStorageDownload";
+export {
   use0gKeyValue,
   type Use0gKeyValueParams,
   type KeyValueData,

@@ -9,14 +9,13 @@ importers:
   .: {}
 
   packages/0g-wagmi:
-    dependencies:
-      '@0glabs/0g-ts-sdk':
-        specifier: ^0.3.1
-        version: 0.3.1(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)
     devDependencies:
       '@0glabs/0g-serving-broker':
-        specifier: ^0.4.4
-        version: 0.4.4(@types/circomlibjs@0.1.6)(@types/crypto-js@4.2.2)(bufferutil@4.0.9)(circomlibjs@0.1.7(bufferutil@4.0.9)(utf-8-validate@5.0.10))(crypto-js@4.2.0)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(rollup@4.52.3)(tslib@2.8.1)(typechain@8.3.2(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.10)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.11)
+        specifier: ^0.5.4
+        version: 0.5.4(@types/circomlibjs@0.1.6)(@types/crypto-js@4.2.2)(bufferutil@4.0.9)(circomlibjs@0.1.7(bufferutil@4.0.9)(utf-8-validate@5.0.10))(crypto-js@4.2.0)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(rollup@4.52.3)(tslib@2.8.1)(typechain@8.3.2(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.10)(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.11)
+      '@0glabs/0g-ts-sdk':
+        specifier: ^0.3.2
+        version: 0.3.2(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)
       '@tanstack/react-query':
         specifier: ^5.62.14
         version: 5.90.2(react@19.1.1)
@@ -168,8 +167,8 @@ importers:
 
 packages:
 
-  '@0glabs/0g-serving-broker@0.4.4':
-    resolution: {integrity: sha512-A6FuR4zKmjt2Ct8hpNlX0EbWfMdjlNnS6YJWjJUbh5dvqPfpwx9sTfd+5rO5NILheq0DOtw7Iim/XHhLFgAEww==}
+  '@0glabs/0g-serving-broker@0.5.4':
+    resolution: {integrity: sha512-jGaP0mbGslmYQoYMLpoFS1RXb1kjq284SFWeaAH7L72U/+fdAbxHDWNzmb6pai2sf922f44OyKkgTLyjM76Cjg==}
     hasBin: true
     peerDependencies:
       '@types/circomlibjs': ^0.1.6
@@ -178,8 +177,8 @@ packages:
       crypto-js: ^4.2.0
       ethers: 6.13.1
 
-  '@0glabs/0g-ts-sdk@0.3.1':
-    resolution: {integrity: sha512-yoid1uWDvKXN4ymYJtBvIn9JyUVU7Zrg4Tql/A/XY8vptUYjSkYSVCNYAlQ/d3jyyh9wFxKA0+C8RngmTg+8CQ==}
+  '@0glabs/0g-ts-sdk@0.3.2':
+    resolution: {integrity: sha512-2oaZX0XRrorIgb49dG6++yPpAbRa35ohBdKqghIy+jV0SkWfAN9Ui6VWcdCOKSf6Rq+880xazuNy2u6hLFQs0A==}
     peerDependencies:
       ethers: 6.13.1
 
@@ -4659,7 +4658,7 @@ packages:
 
 snapshots:
 
-  '@0glabs/0g-serving-broker@0.4.4(@types/circomlibjs@0.1.6)(@types/crypto-js@4.2.2)(bufferutil@4.0.9)(circomlibjs@0.1.7(bufferutil@4.0.9)(utf-8-validate@5.0.10))(crypto-js@4.2.0)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(rollup@4.52.3)(tslib@2.8.1)(typechain@8.3.2(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.10)(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.11)':
+  '@0glabs/0g-serving-broker@0.5.4(@types/circomlibjs@0.1.6)(@types/crypto-js@4.2.2)(bufferutil@4.0.9)(circomlibjs@0.1.7(bufferutil@4.0.9)(utf-8-validate@5.0.10))(crypto-js@4.2.0)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(rollup@4.52.3)(tslib@2.8.1)(typechain@8.3.2(typescript@5.8.3))(typescript@5.8.3)(utf-8-validate@5.0.10)(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.11)':
     dependencies:
       '@ethersproject/bytes': 5.8.0
       '@ethersproject/keccak256': 5.8.0
@@ -4691,7 +4690,7 @@ snapshots:
       express: 5.1.0
       node-fetch: 3.3.2
       open-jsonrpc-provider: 0.2.1(bufferutil@4.0.9)(utf-8-validate@5.0.10)
-      openai: 4.104.0(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.11)
+      openai: 4.104.0(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.11)
       rollup-plugin-polyfill-node: 0.13.0(rollup@4.52.3)
       stream-browserify: 3.0.0
       util: 0.12.5
@@ -4708,7 +4707,7 @@ snapshots:
       - ws
       - zod
 
-  '@0glabs/0g-ts-sdk@0.3.1(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)':
+  '@0glabs/0g-ts-sdk@0.3.2(bufferutil@4.0.9)(ethers@6.15.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)':
     dependencies:
       '@ethersproject/bytes': 5.8.0
       '@ethersproject/keccak256': 5.8.0
@@ -10465,7 +10464,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  openai@4.104.0(ws@8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.11):
+  openai@4.104.0(ws@8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10))(zod@4.1.11):
     dependencies:
       '@types/node': 18.19.127
       '@types/node-fetch': 2.6.13
@@ -10475,7 +10474,7 @@ snapshots:
       formdata-node: 4.4.1
       node-fetch: 2.7.0
     optionalDependencies:
-      ws: 8.18.3(bufferutil@4.0.9)(utf-8-validate@5.0.10)
+      ws: 8.18.0(bufferutil@4.0.9)(utf-8-validate@5.0.10)
       zod: 4.1.11
     transitivePeerDependencies:
       - encoding

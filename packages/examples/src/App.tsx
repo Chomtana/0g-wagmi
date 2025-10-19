@@ -3,6 +3,9 @@ import { Web3Provider } from "./context/Web3Provider";
 
 // Import route components
 import HomePage from "./routes/home";
+import InferencePage from "./routes/inference";
+import StoragePage from "./routes/storage";
+import KeyValuePage from "./routes/key-value";
 import ChatPage from "./routes/chat";
 
 // Import global styles
@@ -18,6 +21,18 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
+      },
+      {
+        path: "inference",
+        element: <InferencePage />,
+      },
+      {
+        path: "storage",
+        element: <StoragePage />,
+      },
+      {
+        path: "key-value",
+        element: <KeyValuePage />,
       },
       {
         path: "chat/:providerAddress",

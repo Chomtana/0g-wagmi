@@ -8,4 +8,5 @@ onlyBuiltDependencies:
   - es5-ext
   - esbuild
   - keccak
+  - secp256k1
   - utf-8-validate

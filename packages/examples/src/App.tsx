@@ -7,6 +7,7 @@ import InferencePage from "./routes/inference";
 import StoragePage from "./routes/storage";
 import KeyValuePage from "./routes/key-value";
 import ChatPage from "./routes/chat";
+import InftPage from "./routes/inft";
 
 // Import global styles
 import "./App.css";
@@ -33,6 +34,10 @@ const router = createBrowserRouter([
       {
         path: "key-value",
         element: <KeyValuePage />,
+      },
+      {
+        path: "inft",
+        element: <InftPage />,
       },
       {
         path: "chat/:providerAddress",

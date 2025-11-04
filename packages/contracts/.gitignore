@@ -1,0 +1,18 @@
+node_modules
+.env
+coverage
+coverage.json
+typechain
+typechain-types
+
+# Hardhat files
+cache
+artifacts
+
+# Deployment files (keep example, ignore actual deployments with secrets)
+deployments/*.json
+!deployments/.gitkeep
+
+# TypeScript
+dist
+*.tsbuildinfo

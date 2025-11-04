@@ -8,7 +8,7 @@
     "deploy": "hardhat run scripts/deploy.ts --network zgtestnet",
     "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
     "export": "ts-node scripts/export-abi.ts",
-    "build": "hardhat compile && ts-node scripts/export-abi.ts",
+    "build": "hardhat compile",
     "test": "hardhat test"
   },
   "devDependencies": {

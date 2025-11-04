@@ -1,4 +1,4 @@
-import { Brain, Upload, Database, Key } from "lucide-react";
+import { Brain, Upload, Database, Key, Sparkles } from "lucide-react";
 import { Link, useLocation } from "react-router";
 import { ConnectButton } from "@/components/ConnectButton";
 
@@ -9,6 +9,7 @@ export function PageHeader() {
     if (location.pathname === "/inference" || location.pathname === "/") return "inference";
     if (location.pathname === "/storage") return "storage";
     if (location.pathname === "/key-value") return "key-value";
+    if (location.pathname === "/inft") return "inft";
     return "";
   };
 
@@ -77,6 +78,19 @@ export function PageHeader() {
               <div className="flex items-center space-x-2">
                 <Key className="h-4 w-4" />
                 <span>Key-Value</span>
+              </div>
+            </Link>
+            <Link
+              to="/inft"
+              className={`px-4 py-2 font-medium transition-colors hover:cursor-pointer ${
+                activeTab === "inft"
+                  ? "text-primary border-b-2 border-primary"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
+            >
+              <div className="flex items-center space-x-2">
+                <Sparkles className="h-4 w-4" />
+                <span>iNFT</span>
               </div>
             </Link>
           </div>

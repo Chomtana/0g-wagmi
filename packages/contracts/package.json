@@ -1,0 +1,21 @@
+{
+  "name": "contracts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Smart contracts for 0g-wagmi iNFT",
+  "scripts": {
+    "compile": "hardhat compile",
+    "deploy": "hardhat run scripts/deploy.ts --network zgtestnet",
+    "deploy:local": "hardhat run scripts/deploy.ts --network localhost",
+    "export": "ts-node scripts/export-abi.ts",
+    "build": "hardhat compile",
+    "test": "hardhat test"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@openzeppelin/contracts": "^5.0.2",
+    "hardhat": "^2.22.17",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.8.3"
+  }
+}
